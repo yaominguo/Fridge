@@ -129,22 +129,22 @@ body {
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
-.btn[data-direction="top"].is-open {
+.board[data-direction="top"].is-open {
     -webkit-transform: rotateX(180deg);
     transform: rotateX(180deg);
 }
 
-.btn[data-direction="right"].is-open {
+.board[data-direction="right"].is-open {
     -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
 }
 
-.btn[data-direction="bottom"].is-open {
+.board[data-direction="bottom"].is-open {
     -webkit-transform: rotateX(-180deg);
     transform: rotateX(-180deg);
 }
 
-.btn[data-direction="left"].is-open {
+.board[data-direction="left"].is-open {
     -webkit-transform: rotateY(-180deg);
     transform: rotateY(-180deg);
 }
