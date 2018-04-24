@@ -3,7 +3,7 @@
     <div class="title">热销推荐</div>
     <ul>
       <li class="item border-bottom" v-for="item in list" :key="item.id">
-        <img :src="item.src" alt="picture">
+        <img :src="item.imgUrl" alt="picture">
         <div class="info-container">
           <p class="info-title">{{item.title}}</p>
           <p class="info-desc">{{item.desc}}</p>
@@ -17,14 +17,8 @@
 <script>
 export default {
   name: 'HomeRecommend',
-  data () {
-    return {
-      list: [
-        {id: 'r01', src: 'http://img1.qunarzz.com/sight/p0/1507/36/ce3d2d6c9ab44d67ae68d940b8781829.water.jpg_200x200_0938a8f2.jpg', title: '野生动物园', desc: '这里是描述啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊~~'},
-        {id: 'r02', src: 'http://img1.qunarzz.com/sight/p0/1507/36/ce3d2d6c9ab44d67ae68d940b8781829.water.jpg_200x200_0938a8f2.jpg', title: '野生动物园', desc: '这里是描述啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊~~'},
-        {id: 'r03', src: 'http://img1.qunarzz.com/sight/p0/1507/36/ce3d2d6c9ab44d67ae68d940b8781829.water.jpg_200x200_0938a8f2.jpg', title: '野生动物园', desc: '这里是描述啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊~~'}
-      ]
-    }
+  props: {
+    list: Array
   }
 }
 </script>
