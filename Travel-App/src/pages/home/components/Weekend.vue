@@ -26,10 +26,7 @@ export default {
   @import '~styles/varibles.styl'
   @import '~styles/mixin.styl'
   .title
-    color: $fontColor
-    line-height: 2.5rem
-    background: #efefef
-    padding: 0 1rem
+    sectionTitle()
   ul
     margin: 0
     padding: 0
