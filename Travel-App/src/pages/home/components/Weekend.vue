@@ -36,7 +36,6 @@ export default {
     line-height: 2.5rem
     background: #efefef
     padding: 0 1rem
-    margin-top: 1rem
   ul
     margin: 0
     padding: 0
