@@ -7,10 +7,12 @@
       <span class="iconfont">&#xe632;</span>
       请输入搜索名称
     </div>
-    <div class="header-right">
-      {{city}}
-      <span class="iconfont">&#xe62d;</span>
-    </div>
+    <router-link to="/city">
+      <div class="header-right">
+        {{city}}
+        <span class="iconfont">&#xe62d;</span>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -26,13 +28,13 @@ export default {
 <style lang="stylus" scoped>
   @import '~styles/varibles.styl';
   .header
-    height: 3rem
+    height: $headerHeight
     display: flex
     align-items: center
     background: $bgColor
     color: #fff
     .header-left
-      width: 10%
+      width: 2rem
       float: left
       text-align: center
     .header-input
@@ -45,7 +47,8 @@ export default {
       color: #ccc
       align-items: center
     .header-right
-      width: 20%
+      width: 4rem
       float: right
       text-align: center
+      color: #fff
 </style>
