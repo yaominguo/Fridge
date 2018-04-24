@@ -52,6 +52,7 @@ export default {
 
 <style lang="stylus" scoped>
   @import '~styles/varibles.styl'
+  @import '~styles/mixin.styl'
   .container >>> .swiper-pagination-bullet-active
     background: $bgColor
   .swiper-pagination
@@ -74,4 +75,6 @@ export default {
         margin-top: 10px
         color: $fontColor
         font-size: 0.8rem
+        max-width: 90%
+        ellipsis()
 </style>
