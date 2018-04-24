@@ -34,7 +34,7 @@ export default {
   @import '~styles/mixin.styl'
   .title
     color: $fontColor
-    line-height: 2rem
+    line-height: 2.5rem
     background: #efefef
     padding: 0 1rem
     margin-top: 1rem
