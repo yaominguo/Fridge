@@ -12,53 +12,17 @@
       <div class="section">
         <div class="title">热门城市</div>
         <div class="button-list">
-          <div class="wrapper">
-            <button>北京</button>
-          </div>
-          <div class="wrapper">
-            <button>北京</button>
-          </div>
-          <div class="wrapper">
-            <button>北京</button>
-          </div>
-          <div class="wrapper">
-            <button>北京</button>
-          </div>
-          <div class="wrapper">
-            <button>北京</button>
-          </div>
-          <div class="wrapper">
-            <button>北京</button>
+          <div class="wrapper" v-for="city in hotCities" :key="city.id">
+            <button>{{city.name}}</button>
           </div>
         </div>
       </div>
-      <div class="section">
-        <div class="title">A</div>
+      <div class="section" v-for="(item, key) in cities" :key="key">
+        <div class="title">{{key}}</div>
         <div class="item-list">
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-        </div>
-        <div class="title">A</div>
-        <div class="item-list">
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-        </div>
-        <div class="title">A</div>
-        <div class="item-list">
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
-          <div class="item border-bottom">阿尔拉</div>
+          <div class="item border-bottom" v-for="city in item" :key="city.id">
+            {{city.name}}
+          </div>
         </div>
       </div>
     </div>
@@ -71,6 +35,10 @@ export default {
   name: 'CityList',
   mounted () {
     this.scroll = new Bscroll(this.$refs.container)
+  },
+  props: {
+    cities: Object,
+    hotCities: Array
   }
 }
 </script>
