@@ -34,7 +34,6 @@ export default {
         .then(this.handleCityInfo)
     },
     handleCityInfo (res) {
-      console.log(res)
       if (res.data.ret && res.data.data) {
         const data = res.data.data
         this.cities = data.cities
