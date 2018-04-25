@@ -5,7 +5,7 @@
         <div class="title">当前城市</div>
         <div class="button-list">
           <div class="wrapper">
-            <button>北京</button>
+            <button>{{this.$store.state.city}}</button>
           </div>
         </div>
       </div>
@@ -13,14 +13,14 @@
         <div class="title">热门城市</div>
         <div class="button-list">
           <div class="wrapper" v-for="city in hotCities" :key="city.id">
-            <button>{{city.name}}</button>
+            <button @click="handleCityClick(city.name)">{{city.name}}</button>
           </div>
         </div>
       </div>
       <div class="section" v-for="(item, key) in cities" :key="key" :ref="key">
         <div class="title">{{key}}</div>
         <div class="item-list">
-          <div class="item border-bottom" v-for="city in item" :key="city.id">
+          <div @click="handleCityClick(city.name)" class="item border-bottom" v-for="city in item" :key="city.id">
             {{city.name}}
           </div>
         </div>
@@ -33,6 +33,13 @@
 import Bscroll from 'better-scroll'
 export default {
   name: 'CityList',
+  methods: {
+    handleCityClick (city) {
+      // this.$store.dispatch('changeCity', city)
+      this.$store.commit('changeCity', city)
+      this.$router.push('/')
+    }
+  },
   mounted () {
     this.scroll = new Bscroll(this.$refs.container)
   },
