@@ -4,8 +4,8 @@
       v-for="key in letters"
       :key="key"
       :ref="key"
-      @click="handleClick"
-      @touchstart="handleTouchStart"
+      @click.native="handleClick"
+      @touchstart.prevent="handleTouchStart"
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
     >
