@@ -71,6 +71,7 @@ export default {
     background: $bgColor
     color: #fff
     text-align: center
+    z-index: 2
     .iconfont
       position: absolute
       left: 1rem
