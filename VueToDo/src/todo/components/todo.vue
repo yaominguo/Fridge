@@ -7,28 +7,60 @@
     placeholder="What do you want to do ?"
     @keyup.enter="addTodo"
     >
-    <todo-item :todo="todo"></todo-item>
-    <todo-tabs :filter="filter"></todo-tabs>
+    <todo-item
+    v-for="todo in filteredTodos"
+    :todo="todo"
+    :key="todo.id"
+    @del="deleteTodo"
+    />
+    <todo-tabs
+    :filter="filter"
+    :todos="todos"
+    @toggle="toggleFilter"
+    @clear="clearAllCompleted"
+    />
   </section>
 </template>
 
 <script>
 import TodoItem from './item'
 import TodoTabs from './tabs'
+let id = 0
 export default {
   name: 'Todo',
   data () {
     return {
-      todo: {
-        id: 0,
-        content: 'this is todo',
-        completed: true
-      },
+      todos: [],
       filter: 'all'
     }
   },
+  computed: {
+    filteredTodos () {
+      if (this.filter === 'all') {
+        return this.todos
+      } else {
+        const completed = this.filter === 'completed'
+        return this.todos.filter(todo => completed === todo.completed)
+      }
+    }
+  },
   methods: {
-    addTodo () {
+    addTodo (e) {
+      this.todos.unshift({
+        id: id++,
+        content: e.target.value.trim(),
+        completed: false
+      })
+      e.target.value = ''
+    },
+    deleteTodo (id) {
+      this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
+    },
+    toggleFilter (state) {
+      this.filter = state
+    },
+    clearAllCompleted () {
+      this.todos = this.todos.filter(todo => !todo.completed)
     }
   },
   components: {
