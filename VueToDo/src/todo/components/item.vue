@@ -1,5 +1,5 @@
 <template>
-  <div :class="['doto-item', status]">
+  <div :class="['todo-item', status]">
     <input
     type="checkbox"
     class="toggle"
@@ -43,7 +43,7 @@ export default {
         text-decoration line-through
     &:hover
       .destory:after
-        content 'X'
+        content 'x'
     label
       white-space pre-line
       word-break break-all

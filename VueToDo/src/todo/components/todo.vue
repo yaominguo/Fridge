@@ -7,20 +7,33 @@
     placeholder="What do you want to do ?"
     @keyup.enter="addTodo"
     >
-    <todo-item></todo-item>
+    <todo-item :todo="todo"></todo-item>
+    <todo-tabs :filter="filter"></todo-tabs>
   </section>
 </template>
 
 <script>
 import TodoItem from './item'
+import TodoTabs from './tabs'
 export default {
   name: 'Todo',
+  data () {
+    return {
+      todo: {
+        id: 0,
+        content: 'this is todo',
+        completed: true
+      },
+      filter: 'all'
+    }
+  },
   methods: {
     addTodo () {
     }
   },
-  component: {
-    TodoItem
+  components: {
+    TodoItem,
+    TodoTabs
   }
 }
 </script>
