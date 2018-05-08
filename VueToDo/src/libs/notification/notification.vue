@@ -36,8 +36,8 @@ export default {
     opacity 0
   .container
     display flex
-    background-color #000
-    color rgba(255,255,255,1)
+    background rgba(0,0,0,0.3)
+    color #fff
     align-items center
     padding 20px
     position fixed

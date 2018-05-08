@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import Notification from './libs/notification'
 import './assets/styles/global.styl'
 Vue.config.productionTip = false
+Vue.use(Notification)
 
 /* eslint-disable no-new */
 new Vue({
