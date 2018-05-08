@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition name="fade" @after-leave="afterLeave" @after-enter="afterEnter">
     <div class="container" :style="style" v-show="visible">
       <span class="content">{{content}}</span>
       <a class="btn" @click="handleClose">{{btn}}</a>
@@ -24,7 +24,11 @@ export default {
     handleClose (e) {
       e.preventDefault()
       this.$emit('close')
-    }
+    },
+    afterLeave () {
+      this.$emit('closed')
+    },
+    afterEnter () {}
   },
   props: {
     content: {

@@ -26,6 +26,9 @@ export default {
       if (this.timer) {
         clearTimeout(this.timer)
       }
+    },
+    afterEnter () {
+      this.height = this.$el.offsetHeight
     }
   },
   beforeDestroy () {
@@ -34,7 +37,9 @@ export default {
   data () {
     return {
       verticalOffset: 0,
-      defaultAutoCloseDuration: 3000
+      defaultAutoCloseDuration: 5000,
+      height: 0,
+      visible: false
     }
   }
 }
