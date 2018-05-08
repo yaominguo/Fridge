@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="container">
+    <div class="container" :style="style" v-show="visible">
       <span class="content">{{content}}</span>
       <a class="btn" @click="handleClose">{{btn}}</a>
     </div>
@@ -10,6 +10,16 @@
 <script>
 export default {
   name: 'Notification',
+  computed: {
+    style () {
+      return {}
+    }
+  },
+  data () {
+    return {
+      visible: true
+    }
+  },
   methods: {
     handleClose (e) {
       e.preventDefault()
