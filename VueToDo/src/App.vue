@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <input type="button" value="notify" @click="notify">
+    <!-- <input type="button" value="notify" @click="notify"> -->
     <router-view/>
-    <!-- <notification content="test notify"></notification> -->
   </div>
 </template>
 
@@ -10,18 +9,12 @@
 export default {
   name: 'App',
   methods: {
-    notify () {
-      this.$notify({
-        content: 'test $notify',
-        btn: 'close'
-      })
-    }
-  },
-  mounted () {
-    // this.$notify({
-    //   content: 'test $notify',
-    //   btn: 'close'
-    // })
+    // notify () {
+    //   this.$notify({
+    //     content: 'test $notify',
+    //     btn: 'close'
+    //   })
+    // }
   }
 }
 </script>

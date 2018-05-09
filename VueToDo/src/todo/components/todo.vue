@@ -52,15 +52,18 @@ export default {
         completed: false
       })
       e.target.value = ''
+      this.$notify({content: '添加了一条待办事项'})
     },
     deleteTodo (id) {
       this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
+      this.$notify({content: '删除待办事项成功'})
     },
     toggleFilter (state) {
       this.filter = state
     },
     clearAllCompleted () {
       this.todos = this.todos.filter(todo => !todo.completed)
+      this.$notify({content: '清除成功'})
     }
   },
   components: {

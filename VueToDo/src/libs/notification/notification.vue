@@ -45,7 +45,7 @@ export default {
     },
     btn: {
       type: String,
-      default: '关闭'
+      default: 'Close'
     }
   }
 }
