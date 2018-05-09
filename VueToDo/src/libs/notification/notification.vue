@@ -1,6 +1,12 @@
 <template>
   <transition name="fade" @after-leave="afterLeave" @after-enter="afterEnter">
-    <div class="container" :style="style" v-show="visible">
+    <div
+    class="container"
+    :style="style"
+    v-show="visible"
+    @mouseenter="clearTimer"
+    @mouseleave="createTimer"
+    >
       <span class="content">{{content}}</span>
       <a class="btn" @click="handleClose">{{btn}}</a>
     </div>
@@ -28,7 +34,9 @@ export default {
     afterLeave () {
       this.$emit('closed')
     },
-    afterEnter () {}
+    afterEnter () {},
+    clearTimer () {},
+    createTimer () {}
   },
   props: {
     content: {
