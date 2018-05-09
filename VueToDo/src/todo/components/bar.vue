@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: 'TodoTabs',
+  name: 'TodoBar',
   data () {
     return {
       states: ['all', 'active', 'completed']

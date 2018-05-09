@@ -1,5 +1,14 @@
 <template>
   <section class="real-app">
+    <div class="tab-container">
+      <tabs value="1">
+        <tab label="tab1" index="1"></tab>
+        <tab index="2">
+          <span slot="label" style="color: red">tab2</span>
+        </tab>
+        <tab label="tab3" index="3"></tab>
+      </tabs>
+    </div>
     <input
     type="text"
     class="add-input"
@@ -13,7 +22,7 @@
     :key="todo.id"
     @del="deleteTodo"
     />
-    <todo-tabs
+    <todo-bar
     :filter="filter"
     :todos="todos"
     @toggle="toggleFilter"
@@ -24,7 +33,7 @@
 
 <script>
 import TodoItem from './item'
-import TodoTabs from './tabs'
+import TodoBar from './bar'
 let id = 0
 export default {
   name: 'Todo',
@@ -62,13 +71,18 @@ export default {
       this.filter = state
     },
     clearAllCompleted () {
-      this.todos = this.todos.filter(todo => !todo.completed)
-      this.$notify({content: '清除成功'})
+      const hasCompleted = this.todos.some(todo => { return todo.completed })
+      if (hasCompleted) {
+        this.todos = this.todos.filter(todo => !todo.completed)
+        this.$notify({content: '清除成功'})
+      } else {
+        this.$notify({content: '没有已完成的待办事项'})
+      }
     }
   },
   components: {
     TodoItem,
-    TodoTabs
+    TodoBar
   }
 }
 </script>
@@ -92,4 +106,7 @@ export default {
       box-sizing border-box
       padding 16px 16px 16px 36px
       box-shadow inset 0 -2px 1px rgba(0,0,0,0.03)
+    .tab-container
+      background-color #fff
+      padding 0 15px
 </style>
