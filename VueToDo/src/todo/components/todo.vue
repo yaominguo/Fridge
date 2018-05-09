@@ -1,12 +1,8 @@
 <template>
   <section class="real-app">
     <div class="tab-container">
-      <tabs value="1">
-        <tab label="tab1" index="1"></tab>
-        <tab index="2">
-          <span slot="label" style="color: red">tab2</span>
-        </tab>
-        <tab label="tab3" index="3"></tab>
+      <tabs :value="filter" @change="handleTabsChange">
+        <tab v-for="tab in states" :key="tab" :label="tab" :index="tab"></tab>
       </tabs>
     </div>
     <input
@@ -25,7 +21,6 @@
     <todo-bar
     :filter="filter"
     :todos="todos"
-    @toggle="toggleFilter"
     @clear="clearAllCompleted"
     />
   </section>
@@ -40,7 +35,8 @@ export default {
   data () {
     return {
       todos: [],
-      filter: 'all'
+      filter: 'all',
+      states: ['all', 'active', 'completed']
     }
   },
   computed: {
@@ -67,9 +63,6 @@ export default {
       this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
       this.$notify({content: '删除待办事项成功'})
     },
-    toggleFilter (state) {
-      this.filter = state
-    },
     clearAllCompleted () {
       const hasCompleted = this.todos.some(todo => { return todo.completed })
       if (hasCompleted) {
@@ -78,6 +71,9 @@ export default {
       } else {
         this.$notify({content: '没有已完成的待办事项'})
       }
+    },
+    handleTabsChange (value) {
+      this.filter = value
     }
   },
   components: {

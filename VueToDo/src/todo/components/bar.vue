@@ -1,7 +1,7 @@
 <template>
   <div class="helper">
     <span class="left">{{unFinishedTodoLength}} items need todo</span>
-    <span class="tabs">
+    <!-- <span class="tabs">
       <span
       v-for="state in states"
       :key="state"
@@ -10,7 +10,7 @@
       >
         {{state}}
       </span>
-    </span>
+    </span> -->
     <span class="clear" @click="clearAllCompleted">Clear Completed</span>
   </div>
 </template>
@@ -18,15 +18,15 @@
 <script>
 export default {
   name: 'TodoBar',
-  data () {
-    return {
-      states: ['all', 'active', 'completed']
-    }
-  },
+  // data () {
+  //   return {
+  //     states: ['all', 'active', 'completed']
+  //   }
+  // },
   methods: {
-    toggleFilter (state) {
-      this.$emit('toggle', state)
-    },
+    // toggleFilter (state) {
+    //   this.$emit('toggle', state)
+    // },
     clearAllCompleted () {
       this.$emit('clear')
     }

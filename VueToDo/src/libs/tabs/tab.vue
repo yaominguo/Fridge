@@ -11,9 +11,17 @@ export default {
       default: 'tab'
     }
   },
+  mounted () {
+    this.$parent.panes.push(this)
+  },
   computed: {
     active () {
-      return false
+      return this.$parent.value === this.index
+    }
+  },
+  methods: {
+    handleClick () {
+      this.$parent.onChange(this.index)
     }
   },
   render () {
@@ -23,7 +31,7 @@ export default {
       active: this.active
     }
     return (
-      <li class={classNames}>
+      <li class={classNames} on-click={this.handleClick}>
         {tab}
       </li>
     )
@@ -38,9 +46,10 @@ export default {
     margin-right 30px
     position relative
     bottom -2px
+    padding 0 10px
     cursor pointer
     &.active
-      border-bottom 2px solid blue
+      border-bottom 2px solid skyblue
     &:last-child
       margin-right 0
 </style>
