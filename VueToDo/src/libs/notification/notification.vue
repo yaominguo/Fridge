@@ -27,10 +27,12 @@ export default {
     }
   },
   methods: {
+    // 点击关闭按钮后向上反馈事件
     handleClose (e) {
       e.preventDefault()
       this.$emit('close')
     },
+    // 元素消失时向上反馈事件
     afterLeave () {
       this.$emit('closed')
     },

@@ -1,6 +1,7 @@
 import Notification from './notification.vue'
 
 export default {
+  // 继承Notification，这样这文件里定义的函数或data才能覆盖vue文件里的
   extends: Notification,
   computed: {
     style () {
@@ -15,6 +16,7 @@ export default {
     this.createTimer()
   },
   methods: {
+    // 加载后创建一个定时器，让通知弹窗定时消失
     createTimer () {
       if (this.defaultAutoCloseDuration) {
         this.timer = setTimeout(() => {
@@ -27,6 +29,7 @@ export default {
         clearTimeout(this.timer)
       }
     },
+    // 当元素显示完成后获取其高度，为了消失时下移上方的元素
     afterEnter () {
       this.height = this.$el.offsetHeight
     }
