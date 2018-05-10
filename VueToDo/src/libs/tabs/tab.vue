@@ -12,15 +12,18 @@ export default {
     }
   },
   mounted () {
+    // 将自身传递添加到父组件也就是tabs中的panes中
     this.$parent.panes.push(this)
   },
   computed: {
     active () {
+      // tabs中的value与自身的index相等即为选中状态
       return this.$parent.value === this.index
     }
   },
   methods: {
     handleClick () {
+      // 触发父组件也就是tabs中的onChange函数
       this.$parent.onChange(this.index)
     }
   },
