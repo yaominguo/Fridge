@@ -3,6 +3,12 @@ import Component from './func-confirm'
 
 const ConfirmModalConstructor = Vue.extend(Component)
 
+const closeModal = (vm) => {
+  vm.visible = false
+  document.body.removeChild(vm.$el)
+  vm.$destroy()
+}
+
 const confirm = (options) => {
   const {title, content, ok, cancel} = options
   const instance = new ConfirmModalConstructor({
@@ -19,13 +25,13 @@ const confirm = (options) => {
     if (cancel) {
       cancel()
     }
-    instance.vm.visible = false
+    closeModal(instance.vm)
   })
   instance.vm.$on('sure', () => {
     if (ok) {
       ok()
     }
-    instance.vm.visible = false
+    closeModal(instance.vm)
   })
 }
 

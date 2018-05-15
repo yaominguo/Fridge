@@ -1,7 +1,7 @@
 import Notification from './notification.vue'
 
 export default {
-  // 继承Notification，这样这文件里定义的函数或data才能覆盖vue文件里的
+  // 扩展Notification，这样这文件里定义的函数或data才能覆盖vue文件里的
   extends: Notification,
   computed: {
     style () {
