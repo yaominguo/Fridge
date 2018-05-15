@@ -1,5 +1,10 @@
 import ConfirmModal from './confirm.vue'
 
 export default {
-  extends: ConfirmModal
+  extends: ConfirmModal,
+  data () {
+    return {
+      visible: false
+    }
+  }
 }

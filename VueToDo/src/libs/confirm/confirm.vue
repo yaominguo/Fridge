@@ -1,14 +1,16 @@
 <template>
-  <div v-show="visible" class="mask">
-    <div class="board">
-      <h2>{{title}}</h2>
-      <p>{{content}}</p>
-      <div class="btn-container">
-        <button class="cancel">取消</button>
-        <button class="ok">确定</button>
+  <transition name="fade">
+    <div v-show="visible" class="mask">
+      <div class="board">
+        <h2>{{title}}</h2>
+        <p>{{content}}</p>
+        <div class="btn-container">
+          <button class="cancel" @click="cancel">取消</button>
+          <button class="ok" @click="sure">确定</button>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -16,7 +18,15 @@ export default {
   name: 'ConfirmModal',
   data () {
     return {
-      visible: false
+      visible: true
+    }
+  },
+  methods: {
+    cancel () {
+      this.$emit('close')
+    },
+    sure () {
+      this.$emit('sure')
     }
   },
   props: {
@@ -33,6 +43,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  .fade-enter-active, .fade-leave-active
+    transition opacity .5s
+  .fade-enter, .fade-leave-to
+    opacity 0
   .mask
     position fixed
     top 0

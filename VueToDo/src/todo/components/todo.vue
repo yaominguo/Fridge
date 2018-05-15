@@ -60,8 +60,14 @@ export default {
       this.$notify({content: '添加了一条待办事项'})
     },
     deleteTodo (id) {
-      this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
-      this.$notify({content: '删除待办事项成功'})
+      this.$confirm({
+        title: 'Delete Todo Item',
+        content: 'Are you sure to delete this Todo Item?',
+        ok: () => {
+          this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
+          this.$notify({content: '删除待办事项成功'})
+        }
+      })
     },
     clearAllCompleted () {
       const hasCompleted = this.todos.some(todo => { return todo.completed })

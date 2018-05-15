@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <input type="button" value="notify" @click="notify"> -->
-    <input type="button" value="confirm" @click="confirm">
+    <!-- <input type="button" value="confirm" @click="confirm"> -->
     <router-view/>
   </div>
 </template>
@@ -16,12 +16,12 @@ export default {
     //     btn: 'close'
     //   })
     // }
-    confirm () {
-      this.$confirm({
-        title: 'test',
-        content: 'Are u sure to do this?'
-      })
-    }
+    // confirm () {
+    //   this.$confirm({
+    //     title: 'test',
+    //     content: 'Are u sure to do this?'
+    //   })
+    // }
   }
 }
 </script>
