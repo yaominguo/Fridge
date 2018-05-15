@@ -6,10 +6,12 @@ import App from './App'
 import router from './router'
 import createStore from './store/store'
 import Notification from './libs/notification'
+import ConfirmModal from './libs/confirm'
 import Tabs from './libs/tabs'
 import './assets/styles/global.styl'
 Vue.config.productionTip = false
 Vue.use(Notification)
+Vue.use(ConfirmModal)
 Vue.use(Tabs)
 Vue.use(Vuex)
 
