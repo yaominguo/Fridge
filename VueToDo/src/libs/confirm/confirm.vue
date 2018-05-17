@@ -5,8 +5,8 @@
         <h2>{{title}}</h2>
         <p>{{content}}</p>
         <div class="btn-container">
-          <button class="cancel" @click="cancel">取消</button>
-          <button class="ok" @click="sure">确定</button>
+          <button class="cancel" @click="cancel">{{cancelBtn}}</button>
+          <button class="ok" @click="sure">{{okBtn}}</button>
         </div>
       </div>
     </div>
@@ -37,6 +37,14 @@ export default {
     content: {
       type: String,
       required: true
+    },
+    cancelBtn: {
+      type: String,
+      default: '取消'
+    },
+    okBtn: {
+      type: String,
+      default: '确定'
     }
   }
 }

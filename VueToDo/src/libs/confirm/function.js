@@ -10,11 +10,13 @@ const closeModal = (vm) => {
 }
 
 const confirm = (options) => {
-  const {title, content, ok, cancel} = options
+  const {title, content, ok, cancel, okBtn, cancelBtn} = options
   const instance = new ConfirmModalConstructor({
     propsData: {
       title,
-      content
+      content,
+      okBtn,
+      cancelBtn
     }
   })
   instance.vm = instance.$mount()

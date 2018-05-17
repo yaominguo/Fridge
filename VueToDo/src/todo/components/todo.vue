@@ -72,8 +72,16 @@ export default {
     clearAllCompleted () {
       const hasCompleted = this.todos.some(todo => { return todo.completed })
       if (hasCompleted) {
-        this.todos = this.todos.filter(todo => !todo.completed)
-        this.$notify({content: '清除成功'})
+        this.$confirm({
+          title: 'Clear Todo Items?',
+          content: 'Clear all completed Todo Items?',
+          okBtn: 'Yes',
+          cancelBtn: 'No',
+          ok: () => {
+            this.todos = this.todos.filter(todo => !todo.completed)
+            this.$notify({content: '清除成功'})
+          }
+        })
       } else {
         this.$notify({content: '没有已完成的待办事项'})
       }
