@@ -7,13 +7,56 @@
   <title>Document</title>
 </head>
 <body>
+  <input type="text" id="name">
+  <button id="setName">设置</button>
+  <input type="text" id="text">
+  <button id="btn">发送</button>
+  <div id="container"></div>
   <script>
-    const wx = new WebSocket('ws://localhost:2333')
-    wx.onopen = () => {
-      wx.send('来自客户端的信息')
+    let wx = null
+    const setName = document.getElementById('setName')
+    setName.onclick = () => {
+      const name = document.getElementById('name').value
+      if (!name) return console.log('名字不可为空！')
+      wx = new WebSocket('ws://localhost:2333')
+      wx.onopen = () => {
+        wx.send(JSON.stringify({
+          name,
+          type: 'setname'
+        }))
+      }
+      document.getElementById('btn').onclick = () => {
+        const text = document.getElementById('text')
+        if (!text.value) return console.log('消息不能为空！')
+        wx.send(JSON.stringify({
+          text: text.value,
+          type: 'chat'
+        }))
+        text.value = ''
+      }
+      wx.onmessage = (e) => {
+        const data = JSON.parse(e.data)
+        const div = createPanel(data)
+        const container = document.getElementById('container')
+        container.insertBefore(div, container.children[0])
+      }
+      setName.setAttribute('disabled', true)
     }
-    wx.onmessage = (e) => {
-      console.log(`这里是客户端，${e.data}`)
+    function createPanel (data) {
+      let name = data.name, text = data.text
+      let div = document.createElement('div')
+      let span1 = document.createElement('span')
+      let span2 = document.createElement('span')
+
+      span1.innerHTML = `${name} ${(new Date()).toString()}`
+      span2.innerHTML = text
+
+      div.appendChild(span1)
+      div.appendChild(document.createElement('br'))
+      div.appendChild(span2)
+      span1.style.color = 'skyblue'
+      span1.style.fontWeight = 'bold'
+      return div
     }
   </script>
 </body>
