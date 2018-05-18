@@ -13,28 +13,28 @@
   <button id="btn">发送</button>
   <div id="container"></div>
   <script>
-    let wx = null
+    let ws = null
     const setName = document.getElementById('setName')
     setName.onclick = () => {
-      const name = document.getElementById('name').value
-      if (!name) return console.log('名字不可为空！')
-      wx = new WebSocket('ws://localhost:2333')
-      wx.onopen = () => {
-        wx.send(JSON.stringify({
-          name,
+      const name = document.getElementById('name')
+      if (!name.value) return console.log('名字不可为空！')
+      ws = new WebSocket('ws://localhost:2333')
+      ws.onopen = () => {
+        ws.send(JSON.stringify({
+          name: name.value,
           type: 'setname'
         }))
       }
       document.getElementById('btn').onclick = () => {
         const text = document.getElementById('text')
         if (!text.value) return console.log('消息不能为空！')
-        wx.send(JSON.stringify({
+        ws.send(JSON.stringify({
           text: text.value,
           type: 'chat'
         }))
         text.value = ''
       }
-      wx.onmessage = (e) => {
+      ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
         const div = createPanel(data)
         const container = document.getElementById('container')

@@ -1,5 +1,5 @@
-const wx = require('nodejs-websocket')
-const server = wx.createServer((conn) => {
+const ws = require('nodejs-websocket')
+const server = ws.createServer((conn) => {
   conn.on('text', (str) => {
     console.log(`这里是服务端，收到来自客户端的信息为：${str}`)
     // conn.sendText(str)
