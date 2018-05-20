@@ -5,13 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    .main{
+      width: 500px;
+      border: 1px solid #ccc;
+      margin: 0 auto;
+      height: 500px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    .item{
+      display: flex;
+    }
+    .item button{
+      border: none;
+      outline: none;
+      background: skyblue;
+      color: #fff;
+      margin-left: -5px;
+      cursor: pointer;
+    }
+    #container{
+      padding: 10px;
+    }
+    .title{
+      color: skyblue;
+      font-weight: bold;
+    }
+    .content{
+      font-size: 14px;
+      padding-left: 20px;
+    }
+  </style>
 </head>
 <body>
-  <input type="text" id="name">
-  <button id="setName">设置</button>
-  <input type="text" id="text">
-  <button id="btn">发送</button>
-  <div id="container"></div>
+  <div class="main">
+    <div class="header">
+      <div class="item">
+        <input type="text" id="name">
+        <button id="setName">设置</button>
+      </div>
+      <div class="item">
+        <input type="text" id="text">
+        <button id="btn">发送</button>
+      </div>
+    </div>
+    <div id="container"></div>
+  </div>
   <script>
     let ws = null
     const setName = document.getElementById('setName')
@@ -48,14 +92,14 @@
       let span1 = document.createElement('span')
       let span2 = document.createElement('span')
 
-      span1.innerHTML = `${name} ${(new Date()).toString()}`
-      span2.innerHTML = text
+      span1.innerHTML = `${(new Date().getFullYear()).toString()}年${(new Date().getMonth()).toString()}月${(new Date().getDate()).toString()}日 ${(Date().split(' '))[4].toString()}`
+      span2.innerHTML = `${data.name}说：${text}`
 
       div.appendChild(span1)
       div.appendChild(document.createElement('br'))
       div.appendChild(span2)
-      span1.style.color = 'skyblue'
-      span1.style.fontWeight = 'bold'
+      span1.className = 'title'
+      span2.className = 'content'
       return div
     }
   </script>
