@@ -59,24 +59,25 @@
   <script>
     let ws = null
     const setName = document.getElementById('setName')
+    const btn = document.getElementById('btn')
+    const text = document.getElementById('text')
+    const name = document.getElementById('name')
+
+    btn.addEventListener('click', sendMessage)
+    text.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage()
+      }
+    })
+
     setName.onclick = () => {
-      const name = document.getElementById('name')
-      if (!name.value) return console.log('名字不可为空！')
+      if (!name.value) return alert('名字不可为空！')
       ws = new WebSocket('ws://localhost:2333')
       ws.onopen = () => {
         ws.send(JSON.stringify({
           name: name.value,
           type: 'setname'
         }))
-      }
-      document.getElementById('btn').onclick = () => {
-        const text = document.getElementById('text')
-        if (!text.value) return console.log('消息不能为空！')
-        ws.send(JSON.stringify({
-          text: text.value,
-          type: 'chat'
-        }))
-        text.value = ''
       }
       ws.onmessage = (e) => {
         const data = JSON.parse(e.data)
@@ -86,6 +87,7 @@
       }
       setName.setAttribute('disabled', true)
     }
+
     function createPanel (data) {
       let name = data.name, text = data.text
       let div = document.createElement('div')
@@ -93,7 +95,7 @@
       let span2 = document.createElement('span')
 
       span1.innerHTML = `${(new Date().getFullYear()).toString()}年${(new Date().getMonth()).toString()}月${(new Date().getDate()).toString()}日 ${(Date().split(' '))[4].toString()}`
-      span2.innerHTML = `${data.name}说：${text}`
+      span2.innerHTML = `${data.name} 说：${text}`
 
       div.appendChild(span1)
       div.appendChild(document.createElement('br'))
@@ -101,6 +103,16 @@
       span1.className = 'title'
       span2.className = 'content'
       return div
+    }
+    
+    function sendMessage () {
+      if (!name.value) return alert('请先设置您的姓名！')
+      if (!text.value) return alert('消息不能为空！')
+      ws.send(JSON.stringify({
+        text: text.value,
+        type: 'chat'
+      }))
+      text.value = ''
     }
   </script>
 </body>
