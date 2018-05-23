@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./ajax.js"></script>
+  <script>
+    window.onload = function () {
+      const user = document.getElementById('user')
+      const pwd = document.getElementById('pwd')
+      const regBtn = document.getElementById('reg_btn')
+      const loginBtn = document.getElementById('login_btn')
+      regBtn.onclick = () => {
+        ajax({
+          url: '/user',
+          data: {
+            act: 'reg',
+            user: user.value,
+            pass: pwd.value
+          },
+          type: 'get',
+          success: function (res) {
+            const data = JSON.parse(res)
+            if (data.ok){
+              alert('注册成功！')
+            } else {
+              alert(`注册失败，${data.msg}`)
+            }
+          },
+          error: function () {
+            alert('通讯错误！')
+          }
+        })
+      }
+      loginBtn.onclick = () => {
+        ajax({
+          url: '/user',
+          data: {
+            act: 'login',
+            user: user.value,
+            pass: pwd.value
+          },
+          type: 'get',
+          success: function (res) {
+            const data = JSON.parse(res)
+            if (data.ok){
+              alert('登录成功！')
+            } else {
+              alert(`登录失败，${data.msg}`)
+            }
+          },
+          error: function () {
+            alert('通讯错误！')
+          }
+        })
+      }
+    }
+  </script>
+</head>
+<body>
+  <div>
+    用户: <input type="text" id="user">
+    密码: <input type="password" id="pwd">
+    <input type="button" id="reg_btn" value="注册">
+    <input type="button" id="login_btn" value="登录">
+  </div>
+</body>
+</html>
