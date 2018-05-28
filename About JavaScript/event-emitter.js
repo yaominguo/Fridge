@@ -10,7 +10,7 @@ class EventEmitter {
       throw new Error(`${listener} is not a Function!`)
     }
     if (this.events[type]) {
-      this.events.push(listener)
+      this.events[type].push(listener)
       if (this.maxListeners != 0 && this.events[type].length > this.maxListeners) {
         console.warn('Warning: Possible EventEmitter memory leak detected')
       }
@@ -26,7 +26,7 @@ class EventEmitter {
         listen.apply(this, rest)
       })
     } else {
-      throw new Error(`There is not a EventListener called ${type}, please check again.`)
+      throw new Error(`There is not a EventListener called "${type}", please check again.`)
     }
   }
   // 移除监听事件
@@ -36,11 +36,28 @@ class EventEmitter {
     }
     if (this.events[type]) {
       // 筛选不等于listener的元素形成新的事件数组
-      this.events[type] = this.events[type].filter(item => {
-        item != listener
-      })
+      this.events[type] = this.events[type].filter(item => item != listener)
     } else {
-      throw new Error(`There is not a EventListener called ${type}, please check again.`)
+      throw new Error(`There is not a EventListener called "${type}", please check again.`)
     }
   }
 }
+
+// 测试
+const test = new EventEmitter()
+const sayName = (name) => {
+  console.log(`My name is ${name}.`)
+}
+
+test.on('sayHello', () => {
+  console.log(`Hello! Nice to meet you!`)
+})
+test.on('sayHello', sayName)
+test.on('sayBye', (str) => {
+  console.log(`Good Bye! ${str}`)
+})
+
+test.emit('sayHello', 'Max')
+test.emit('sayBye', 'See you next week!')
+test.remove('sayHello', sayName)
+test.emit('sayHello')
