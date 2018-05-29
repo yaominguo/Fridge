@@ -67,3 +67,84 @@ class GPromise {
     return result
   }
 }
+
+/** 测试用例，与原Promise对比 */
+let promiseCount = 0
+const test = (isPromise) => {
+  let thisPromiseCount = promiseCount++
+  let executor = (resolve, reject) => {
+    console.log(`${thisPromiseCount}: Promise started (Async code started.)`)
+    global.setTimeout(() => {
+      resolve(thisPromiseCount)
+    }, Math.random() * 2000 + 1000)
+  }
+
+  console.log(`${thisPromiseCount}: Started (Sync code started.)`)
+
+  let p = isPromise ? new Promise(executor) : new GPromise(executor)
+  p.then(
+    (val) => {
+      console.log(`${val}: Promise fulfilled (Async code terminated.)`)
+    },
+    (reason) => {
+      console.log(`Handle rejected promise ${val} here.)`)
+    }
+  )
+
+  console.log(`${thisPromiseCount}: Promise made (Sync code terminated.)`)
+}
+test(true)
+test(false)
+
+/** 测试then回调 */
+function async1() {
+  return new GPromise(
+    (resolve, reject) => {
+      console.log('async1 start')
+      setTimeout(() => {
+        resolve('async1 finished')
+      }, 1000)
+    }
+  )
+}
+
+function async2() {
+  return new GPromise(
+    (resolve, reject) => {
+      console.log('async2 start')
+      setTimeout(() => {
+        resolve('async2 finished')
+      }, 1000)
+    }
+  )
+}
+
+function async3() {
+  return new GPromise(
+    (resolve, reject) => {
+      console.log('async3 start')
+      setTimeout(() => {
+        resolve('async3 finished')
+      }, 1000)
+    }
+  )
+}
+
+async1()
+  .then(
+    data => {
+      console.log(data)
+      return async2()
+    }
+  )
+  .then(
+    data => {
+      console.log(data)
+      return async3()
+    }
+  )
+  .then(
+    data => {
+      console.log(data)
+    }
+  )
