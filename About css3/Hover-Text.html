@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hover Text</title>
+  <style>
+    .text{
+      display: inline-block;
+      position: relative;
+      color: skyblue;
+      cursor: pointer;
+    }
+    .text::after{
+      content: '';
+      position: absolute;
+      width: 100%;
+      transform: scaleX(0);
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background: skyblue;
+      transform-origin: bottom right;
+      transition: transform 0.25s ease-out;
+    }
+    .text:hover::after{
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+  </style>
+</head>
+<body>
+  <p class="text">Hover this text to see the effect!</p>
+</body>
+</html>
