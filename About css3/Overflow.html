@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Overflow</title>
+  <style>
+    body{
+      background-color: skyblue;
+    }
+    .container{
+      position: relative;
+    }
+    .container::after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      width: 240px;
+      height: 25px;
+      background: linear-gradient(rgba(255,255,255,0.001), white);
+      pointer-events: none;
+    }
+    .content{
+      overflow-y: scroll;
+      background: white;
+      width: 240px;
+      height: 200px;
+      padding: 15px 0;
+      line-height: 1.2;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere, enim omnis? Non numquam iste error aliquam suscipit harum quisquam explicabo ad consectetur culpa! Assumenda at consectetur inventore commodi dolorem molestias.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto aperiam iure eius doloremque, tenetur ea. Minus deserunt ipsum voluptatibus. Dolorum doloremque ipsam beatae blanditiis deleniti. Eligendi, nulla? Reiciendis, sapiente magni.
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut veniam nostrum dolor ratione laboriosam, obcaecati earum libero molestiae, magni ex dicta eum, placeat vero modi perspiciatis esse! Architecto, soluta asperiores.
+    </div>
+  </div>
+</body>
+</html>
