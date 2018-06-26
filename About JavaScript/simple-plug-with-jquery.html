@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Simple Plugin</title>
+  <style>
+    ul{
+      list-style: none;
+      padding: 0;
+      margin: 100px auto;
+      width: 200px;
+      height: 40px;
+    }
+    .item{
+      width: 40px;
+      height: 40px;
+      background: skyblue;
+      border-radius: 50%;
+      float: left;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <ul id="box1">
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+  </ul>
+  <ul id="box2">
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+    <li class="item"></li>
+  </ul>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+  var plug = (function(){
+    var move = function(item, num){
+      item.each(function(index){
+        if(index < num){
+          $(this).css('background', 'gold')
+        } else {
+          $(this).css('background', 'skyblue')
+        }
+      })
+    }
+    var init = function(ele, num){
+      var item = ele.find('li')
+      ele.on('mouseover', 'li', function(){
+        move(item, $(this).index()+1)
+      }).on('click', 'li', function(){
+        num = $(this).index()+1
+      }).on('mouseout', 'li', function(){
+        move(item, num)
+      })
+      move(item, num)
+    }
+    $.fn.extend({
+      lighting: function(num){
+        return init(this, num)
+      }
+    })
+
+    return {
+      init: init
+    }
+  })()
+
+  plug.init($('#box1'), 3)
+  $('#box2').lighting(2)
+</script>
+</html>
