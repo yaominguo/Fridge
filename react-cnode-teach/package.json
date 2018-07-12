@@ -1,0 +1,19 @@
+{
+  "name": "react-cnode-teach",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config build/webpack.config.js"
+  },
+  "author": "Max Kwok",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.4.1",
+    "webpack": "^4.16.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.0.8"
+  }
+}
