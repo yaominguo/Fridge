@@ -1,7 +1,9 @@
 const path = require('path')
 const HTMLPlugin = require('html-webpack-plugin')
 
-module.exports = {
+const isDev = process.env.NODE_ENV === 'development'
+
+const config = {
   // 入口文件
   entry: {
     app: path.join(__dirname, '../client/app.js')
@@ -34,3 +36,20 @@ module.exports = {
     })
   ]
 }
+if(isDev){
+  config.devServer = {
+    host: '0.0.0.0', //这样可以支持localhost或ip地址的方式访问
+    port: '8888',
+    contentBase: path.join(__dirname, '../dist'),
+    // hot: true,
+    overlay: { //报错弹窗更明显
+      errors: true
+    },
+    publicPath: '/public', //前面需要加/public才能访问到生成的静态文件
+    historyApiFallback: {
+      index: '/public/index.html'   //所有404的请求全部返回到这个html
+    }
+  }
+}
+
+module.exports = config

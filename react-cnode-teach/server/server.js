@@ -26,7 +26,7 @@ app.use('/public', express.static(path.join(__dirname, '../dist')))
 app.get('*', function(req, res){
   // 服务端渲染
   const appString = ReactSSR.renderToString(serverEntry)
-  const htmlBody = template.replace('<app></app>', appString)
+  const htmlBody = template.replace('<!-- app -->', appString)
   res.send(htmlBody)
 }) 
 
