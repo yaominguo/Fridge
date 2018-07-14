@@ -1,16 +1,17 @@
 const path = require('path')
-const HTMLPlugin = require('html-webpack-plugin')
 
 module.exports = {
+  target: 'node', //打包出来的内容是用在哪个执行环境当中的
   // 入口文件
   entry: {
-    app: path.join(__dirname, '../client/app.js')
+    app: path.join(__dirname, '../client/server-entry.js')
   },
   // 出口文件
   output: {
-    filename: '[name].[hash].js', //这里的name是entry里的app
+    filename: 'server-entry.js', 
     path: path.join(__dirname, '../dist'),
-    publicPath: '', //帮助我们区分url是静态资源还是api请求
+    publicPath: '/public', //帮助我们区分url是静态资源还是api请求
+    libraryTarget: 'commonjs2' //规范，如amd、cmd、commonjs等
   },
   module: {
     rules: [
@@ -26,9 +27,5 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [
-    // 生成html页面，同时将生成的js注入到html页面中
-    new HTMLPlugin()
-  ]
+  }
 }
