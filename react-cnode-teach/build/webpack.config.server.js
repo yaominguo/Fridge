@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+  mode: 'development',
   target: 'node', //打包出来的内容是用在哪个执行环境当中的
   // 入口文件
   entry: {
