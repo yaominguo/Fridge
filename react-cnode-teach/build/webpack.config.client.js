@@ -1,10 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
+const baseConfig = require('./webpack.base')
 const HTMLPlugin = require('html-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 
-const config = {
+const config = webpackMerge(baseConfig, {
   mode: 'production',
   // 入口文件
   entry: {
@@ -13,31 +15,6 @@ const config = {
   // 出口文件
   output: {
     filename: '[name].[hash].js', //这里的name是entry里的app
-    path: path.join(__dirname, '../dist'),
-    publicPath: '/public/', //帮助我们区分url是静态资源还是api请求
-  },
-  module: {
-    rules: [
-      {
-        enforce: 'pre',
-        test: /.(js|jsx)$/,
-        loader: 'eslint-loader',
-        exclude: [
-          path.resolve(__dirname, '../node_modules')
-        ]
-      },
-      {
-        test: /.jsx$/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /.js$/,
-        loader: 'babel-loader',
-        exclude: [
-          path.join(__dirname, '../node_modules')
-        ]
-      }
-    ]
   },
   plugins: [
     // 生成html页面，同时将生成的js注入到html页面中
@@ -45,7 +22,7 @@ const config = {
       template: path.join(__dirname, '../client/template.html')
     })
   ]
-}
+})
 if(isDev){
   config.mode = 'development'
   config.entry = {
