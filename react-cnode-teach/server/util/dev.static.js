@@ -3,13 +3,16 @@ const path = require('path')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
 const proxy = require('http-proxy-middleware')
+const serialize = require('serialize-javascript')
+const ejs = require('ejs')
+const asyncBootstrap = require('react-async-bootstrapper')
 const ReactSSR = require('react-dom/server')
 
 const serverConfig = require('../../build/webpack.config.server')
 
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
-    axios.get('http://localhost:8888/public/index.html')
+    axios.get('http://localhost:8888/public/server.ejs')
       .then(res => {
         resolve(res.data)
       })
@@ -22,7 +25,7 @@ const mfs = new MemoryFs
 const serverCompiler = webpack(serverConfig)
 //fs是在硬盘上读写，mfs是内存上读写，速度会比较快
 serverCompiler.outputFileSystem = mfs
-let serverBundle
+let serverBundle, createStoreMap
 
 // 监听server-entry里依赖的文件是否有变化, 每次有更新就更新serverBundle
 serverCompiler.watch({}, (err, stats) => {
@@ -36,7 +39,15 @@ serverCompiler.watch({}, (err, stats) => {
   const m = new Module()
   m._compile(bundle, 'server-entry.js') //用module解析string的内容生成新的模块,记得指定文件名
   serverBundle = m.exports.default
+  createStoreMap = m.exports.createStoreMap
 })
+
+const getStoreState = (stores) => (
+  Object.keys(stores).reduce((result, storeName) => {
+    result[storeName] = stores[storeName].toJson()
+    return result
+  }, {})
+)
 
 module.exports = function(app){
   /**
@@ -50,8 +61,25 @@ module.exports = function(app){
   }))
   app.get('*', function(req, res){
     getTemplate().then(template => {
-      const content = ReactSSR.renderToString(serverBundle)
-      res.send(template.replace('<!-- app -->', content))
+      const routerContext = {}
+      const stores = createStoreMap()
+      const app = serverBundle(stores, routerContext, req.url)
+
+      asyncBootstrap(app).then(() => {
+        if (routerContext.url) {
+          res.status(302).setHeader('Location', routerContext.url)
+          res.end()
+          return
+        }
+        const state = getStoreState(stores)
+        const content = ReactSSR.renderToString(app)
+        // res.send(template.replace('<!-- app -->', content))
+        const html = ejs.render(template, {
+          appString: content,
+          initialState: serialize(state),
+        })
+        res.send(html)
+      })
     })
   })
 }

@@ -20,6 +20,10 @@ const config = webpackMerge(baseConfig, {
     // 生成html页面，同时将生成的js注入到html页面中
     new HTMLPlugin({
       template: path.join(__dirname, '../client/template.html')
+    }),
+    new HTMLPlugin({
+      template: '!!ejs-compiled-loader!' + path.join(__dirname, '../client/server.template.ejs'),
+      filename: 'server.ejs'
     })
   ]
 })
