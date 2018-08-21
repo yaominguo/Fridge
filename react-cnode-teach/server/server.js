@@ -2,7 +2,7 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const ReactSSR = require('react-dom/server')
+const serverRender = require('./util/server-render.js')
 const fs = require('fs')
 const path = require('path')
 
@@ -26,32 +26,22 @@ app.use('/api/user', require('./util/handle-login'))
 app.use('/api', require('./util/proxy'))
 
 if(!isDev){
-  const serverEntry = require('../dist/server-entry').default
-  /**require出来的serverEntry是这样的，不像import会返回default的部分 */
-  // { __esModule: true,
-  //   default:
-  //    { '$$typeof': Symbol(react.element),
-  //      type: [Function: t],
-  //      key: null,
-  //      ref: null,
-  //      props: {},
-  //      _owner: null
-  //     }
-  // }
-
-  const template = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
+  const serverEntry = require('../dist/server-entry')
+  const template = fs.readFileSync(path.join(__dirname, '../dist/server.ejs'), 'utf-8')
   // 以/public开头的判断为静态文件，映射到dist文件夹下
   app.use('/public', express.static(path.join(__dirname, '../dist')))
-  app.get('*', function(req, res){
-    // 服务端渲染
-    const appString = ReactSSR.renderToString(serverEntry)
-    const htmlBody = template.replace('<!-- app -->', appString)
-    res.send(htmlBody)
+  app.get('*', function(req, res, next){
+    serverRender(serverEntry, template, req, res).catch(next)
   })
 } else {
   const devStatic = require('./util/dev.static')
   devStatic(app)
 }
+
+app.use(function (error, req, res, next) {
+  console.error(error)
+  res.status(500).send(error)
+})
 
 app.listen(2333, function(){
   console.log('Server is listening on port 2333!')

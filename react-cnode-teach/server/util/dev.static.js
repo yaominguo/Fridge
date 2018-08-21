@@ -3,12 +3,7 @@ const path = require('path')
 const webpack = require('webpack')
 const MemoryFs = require('memory-fs')
 const proxy = require('http-proxy-middleware')
-const serialize = require('serialize-javascript')
-const ejs = require('ejs')
-const asyncBootstrap = require('react-async-bootstrapper')
-const ReactSSR = require('react-dom/server')
-const Helmet = require('react-helmet').default
-
+const serverRender = require('./server-render')
 const serverConfig = require('../../build/webpack.config.server')
 
 const getTemplate = () => {
@@ -39,7 +34,7 @@ const mfs = new MemoryFs
 const serverCompiler = webpack(serverConfig)
 //fs是在硬盘上读写，mfs是内存上读写，速度会比较快
 serverCompiler.outputFileSystem = mfs
-let serverBundle, createStoreMap
+let serverBundle
 
 // 监听server-entry里依赖的文件是否有变化, 每次有更新就更新serverBundle
 serverCompiler.watch({}, (err, stats) => {
@@ -53,16 +48,8 @@ serverCompiler.watch({}, (err, stats) => {
   // const m = new Module()
   // m._compile(bundle, 'server-entry.js') //用module解析string的内容生成新的模块,记得指定文件名
   const m = getModuleFromString(bundle, 'server-entry.js')
-  serverBundle = m.exports.default
-  createStoreMap = m.exports.createStoreMap
+  serverBundle = m.exports
 })
-
-const getStoreState = (stores) => (
-  Object.keys(stores).reduce((result, storeName) => {
-    result[storeName] = stores[storeName].toJson()
-    return result
-  }, {})
-)
 
 module.exports = function(app){
   /**
@@ -74,32 +61,12 @@ module.exports = function(app){
   app.use('/public', proxy({
     target: 'http://localhost:8888'
   }))
-  app.get('*', function(req, res){
+  app.get('*', function(req, res, next){
+    if (!serverBundle) {
+      return res.send('waiting for compile, refresh later...')
+    }
     getTemplate().then(template => {
-      const routerContext = {}
-      const stores = createStoreMap()
-      const app = serverBundle(stores, routerContext, req.url)
-
-      asyncBootstrap(app).then(() => {
-        if (routerContext.url) {
-          res.status(302).setHeader('Location', routerContext.url)
-          res.end()
-          return
-        }
-        const helmet = Helmet.rewind()
-        const state = getStoreState(stores)
-        const content = ReactSSR.renderToString(app)
-        // res.send(template.replace('<!-- app -->', content))
-        const html = ejs.render(template, {
-          appString: content,
-          initialState: serialize(state),
-          meta: helmet.meta.toString(),
-          title: helmet.title.toString(),
-          style: helmet.style.toString(),
-          link: helmet.link.toString(),
-        })
-        res.send(html)
-      })
-    })
+      return serverRender(serverBundle, template, req, res)
+    }).catch(next)
   })
 }
