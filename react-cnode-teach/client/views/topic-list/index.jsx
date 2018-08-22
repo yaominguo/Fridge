@@ -4,6 +4,7 @@ import pt from 'prop-types'
 import Helmet from 'react-helmet'
 import Button from '@material-ui/core/Button'
 import AppState from '../../store/app-state'
+import Container from '../layout/container'
 
 @inject('appState') @observer
 export default class TopicList extends React.Component {
@@ -22,7 +23,7 @@ export default class TopicList extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <Helmet>
           <title>
             This is topic list
@@ -36,7 +37,7 @@ export default class TopicList extends React.Component {
         <span>
           {this.props.appState.msg}
         </span>
-      </div>
+      </Container>
     )
   }
 }
