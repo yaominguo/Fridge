@@ -9,7 +9,7 @@ export default class App extends React.Component {
 
   render() {
     return [
-      <AppBar />,
+      <AppBar key="app-bar" />,
       <Routes key="routes" />,
     ]
   }
