@@ -16,7 +16,7 @@ app.use(session({
   name: 'tid',
   resave: false,
   savaUninitialized: false,
-  secret: 'react cnode class'
+  secret: 'react cnode class', // 用此字符串来加密cookie
 }))
 
 // 处理小图标请求
