@@ -1,39 +1,50 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const Article = require('./db').Article
+const read = require('node-readability')
 
 const app = express()
-const articles = [
-  {title: 'Example'}
-]
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 const port = process.env.PORT || 3000
 
-// curl http://localhost:3000/articles 触发
 app.get('/articles', (req, res, next) => {
-  res.send(articles)
+  Article.all((err, articles) => {
+    if (err) return next(err)
+    res.send(articles)
+  })
 })
-// curl --data "title=Example2" http://localhost:3000/articles 触发
 app.post('/articles', (req, res, next) => {
-  const article = {title: req.body.title}
-  articles.push(article)
-  res.send(articles)
+  const url = req.body.url
+  read(url, (err, result) => {
+    if (err || !result) res.status(500).send('Error downloading article')
+    Article.create(
+      {title: result.title, content: result.content},
+      (err, article) => {
+        if (err) return next(err)
+        res.send('OK')
+      }
+    )
+  })
 })
-// curl http://localhost:3000/articles/0 触发
 app.get('/articles/:id', (req, res, next) => {
   const id = req.params.id
-  console.log('Fetching:', id)
-  res.send(articles[id])
+  Article.find(id, (err, article) => {
+    if (err) return next(err)
+    res.send(article)
+  })
 })
-// curl -X DELETE http://localhost:3000/articles/0 触发
 app.delete('/articles/:id', (req, res, next) => {
   const id = req.params.id
-  console.log('Deleting:', id)
-  delete articles[id]
-  res.send({message: 'Deleted'})
+  Article.delete(id, (err) => {
+    if (err) return next(err)
+    res.send({message: 'Deleted'})
+  })
 })
 
 app.listen(port, () => {
   console.log(`Express web app available at http://localhost:${port}`)
 })
+
+module.exports = app
