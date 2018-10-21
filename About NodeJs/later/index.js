@@ -6,13 +6,22 @@ const read = require('node-readability')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+app.use('/css/bootstrap.min.css', express.static('node_modules/bootstrap/dist/css/bootstrap.min.css'))
 
 const port = process.env.PORT || 3000
 
 app.get('/articles', (req, res, next) => {
   Article.all((err, articles) => {
     if (err) return next(err)
-    res.send(articles)
+    // res.send(articles)
+    res.format({
+      html: () => {
+        res.render('articles.ejs', {articles: articles});
+      },
+      json: () => {
+        res.send(articles)
+      }
+    })
   })
 })
 app.post('/articles', (req, res, next) => {
