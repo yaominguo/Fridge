@@ -8,7 +8,8 @@
     "dev": "webpack-dev-server --host 0.0.0.0 --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "build:mac": "npm run build && electron-packager ./dist TravelApp --platform=mas --electron-version=3.0.0 --overwrite"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -37,6 +38,8 @@
     "compression-webpack-plugin": "^1.1.11",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
+    "electron": "^3.0.11",
+    "electron-packager": "^13.0.1",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
