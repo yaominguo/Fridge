@@ -132,6 +132,30 @@ export default {
             label: '文字',
             type: 'text',
             width: 8,
+            formatter: (val) => val += '(进行格式化处理)'
+          },
+          example11: {
+            label: 'test',
+            width: 8,
+            render:(h) => {
+              // render自定义组件，会比较麻烦
+              return h('div', [
+                h('p', '测试render2个'),
+                h('a-select', {
+                  props: {
+                    placeholder: 'placeholder',
+                    allowClear: true,
+                    options: [{value: 'test', label: '测试render select'}],
+                  },
+                  on: {
+                    select(val) {
+                      console.log('select-change', val)
+                    }
+                  },
+                  style: 'color: red',
+                })
+              ])
+            },
           }
         }
       ],
