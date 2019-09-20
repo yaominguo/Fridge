@@ -1,0 +1,200 @@
+
+.step-next{
+  position: relative;
+  line-height: 120px;
+  height: 120px;
+  text-align: left;
+}
+
+.step-next .btn{
+  width: 160px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.step-next .btn.next{
+  margin-left: 234px;
+}
+
+.step-next .btn.back{
+  margin-left: 200px;
+}
+
+.step-next .btn.next1{
+  margin-left: 20px;
+}
+
+
+.left-area{
+  display: inline-block;
+  max-width: 460px;
+  min-width: 400px;
+  border: 1px solid #e9ecf5;
+  border-top: 4px solid #e9ecf5;
+  border-radius: 5px;
+  text-align: left;
+  min-height: 250px;
+}
+
+.left-area .title{
+    border-bottom: 1px solid #e9ecf5;
+    padding: 0 22px;
+    line-height: 50px;
+    background: #fbfbfb;
+    font-size: 16px;
+    display: table;
+    width: 100%;
+}
+.left-area .title span:first-child{
+    color: #222;
+    width: 95px;
+    display: table-cell;
+}
+.left-area .title span:last-child{
+    color: #507bea;
+    max-width: 270px;
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.left-area .item{
+    margin: 0 22px;
+    line-height: 64px;
+    border-bottom: 1px dashed #e9ecf5;
+    font-size: 16px;
+}
+
+.left-area .item span:first-child{
+    color: #222;
+    width: 95px;
+    display: inline-block;
+}
+.left-area .item span:last-child{
+  color: #666;
+}
+
+
+.mid-img{
+    display: inline-block;
+    vertical-align: top;
+    height: 250px;
+    padding: 100px 20px;
+
+}
+
+.right-area{
+  text-align: left;
+  display: inline-block;
+  width: 460px;
+  border: 1px solid #e9ecf5;
+  border-top: 4px solid #e9ecf5;
+  border-radius: 5px;
+  min-height: 250px;
+  vertical-align: top;
+}
+.right-area .title{
+    border-bottom: 1px solid #e9ecf5;
+    padding: 0 25px;
+    line-height: 50px;
+    background: #fbfbfb;
+}
+.right-area .right-btns{
+  margin-top: 60px;
+  text-align: center;
+}
+.right-area .after-confirm-room{
+    padding: 20px 26px 40px 30px;
+    background: #fff;
+}
+
+.right-area .after-confirm-room .new-room{
+    display: table;
+    width: 100%;
+    color: #507bea;
+}
+
+.right-area .after-confirm-room .new-room>div{
+    display: table-cell;
+    width: 80%;
+    font-size: 16px;
+}
+.right-area .after-confirm-room .new-name{
+  margin-top: 40px;
+  font-size: 16px;
+}
+#steps{
+  margin-top: 20px;
+  padding: 20px 0;
+}
+.content{
+  position: relative;
+  border-top: 1px solid #dcdee2;
+}
+
+.card-title{
+    font-size: 20px;
+    padding: 12px;
+    color: #507bea;
+    border-bottom: 1px solid #eee;
+}
+
+.step2 .stay-time {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.step2 .item-content{
+  padding: 40px 30px;
+}
+
+.step2 .pay-back-deposit{
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    padding: 20px;
+    margin: 10px;
+}
+
+.step2 .detail span:first-child{
+  background-color: #edf3ff;
+  color: #507bea;
+  border-radius: 3px;
+  padding: 4px;
+}
+.step2 .pay-back-bill{
+  padding: 20px 30px;
+}
+.step2 .pay-back-bill .remark{
+  display: flex;
+  padding: 30px 0;
+  border-bottom: 1px solid #efefef;
+}
+.step2 .pay-back-bill .remark .title{
+  display: inline-block;
+  width: 105px;
+  background:none;
+  color: #333;
+  font-size: 15px;
+}
+.step2 .detail .blue{
+  color: #507bea;
+}
+.step2 .remindTxt{
+    margin: 28px 32px 0;
+    display: flex;
+    width: 94%;
+    margin-left: 3%;
+    margin-top: 20px;
+    border: 1px solid #fff3c1;
+    background-color: #fffdf5;
+    padding: 14px;
+}   
+.step2 .remindTxt .left{
+  line-height: 20px;
+  color: #507bea;
+  cursor: auto;
+}
+    
+
+    

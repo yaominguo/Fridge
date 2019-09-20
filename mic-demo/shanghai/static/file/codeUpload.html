@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>扫码上传图片</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style type="text/css">
+        #upload {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            position: relative;
+            background-image: url(plus.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 5px;
+        }
+        
+        #file {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            cursor: pointer;
+            z-index: 5;
+        }
+        
+        img {
+            width: 80px;
+            height: 80px;
+            margin: 0 10px 0px 0;
+            border-radius: 5px;
+        }
+        
+        h3 {
+            text-align: center;
+        }
+        
+        #main {
+            width: 270px;
+            margin: 0 auto;
+        }
+        
+        #preview {
+            margin: 30px 0 20px 0;
+        }
+        
+        #count {
+            color: #2d8cf0;
+            font-size: 18px;
+            display: inline-block;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <h3>微信上传</h3>
+        <div id="preview">
+            <div id="upload">
+                <input type="file" accept="image/*" id="file" multiple="multiple" value="" />
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var preview = document.querySelector('#preview');
+        var eleFile = document.querySelector('#file');
+        var newUrl, img;
+        let filesArray = "";
+        eleFile.addEventListener('change', function() {
+            var file = this.files[0];
+            let name = '';
+            // 确认选择的文件是图片                
+            if (file.type.indexOf("image") == 0) {
+                let index = file.name.lastIndexOf('.');
+                name = 'test' + file.name.substring(index);
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    // 图片base64化
+                    newUrl = this.result;
+                    img = document.createElement("img");
+                    img.src = newUrl;
+
+                };
+            }
+            //上传临时文件
+            let formdata = new FormData();
+            let url = getQueryString("_ENV") + "/api/service-file/upload/1/temp/";
+            formdata.append('file', file, name);
+            $.ajax({
+                url: url + getQueryString("code"),
+                data: formdata,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-File-Name", file.name);
+                    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                },
+                type: 'POST',
+                success: function(res) {
+                    preview.prepend(img);
+                },
+                error: function(error) {
+                    alert('上传失败');
+                }
+            })
+        });
+        //得到传递参数
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+        }
+    </script>
+</body>
