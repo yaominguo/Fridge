@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 import Layout from './layout.vue'
 import iView from 'iview'

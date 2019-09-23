@@ -584,6 +584,7 @@ export default {
         } else {
             return string;
         }
-    }
+    },
+
 
 }
