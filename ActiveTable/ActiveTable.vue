@@ -1,51 +1,63 @@
 <template>
   <a-table
+    :size="size"
     :rowKey="rowKey"
     :columns="layout"
     :dataSource="data"
     :bordered="bordered"
     :rowClassName="setClassName"
-    :rowSelection="rowSelection"
+    :rowSelection="rowSelections"
     :customRow="customRow"
     :pagination="pagination"
     @change="handleTableChange"
   >
-    <span v-for="item in renderItems" :key="item.dataIndex" :slot="item.dataIndex" slot-scope="text, record">
-      <a v-if="item.type === 'link'" @click="item.onClick(record)">{{ text || item.linkText }}</a>
-      <span v-else-if="item.type === 'date'">{{ $tool.transformDate(text) }}</span>
-      <span v-else-if="item.type === 'money'">{{ $tool.toMoney(text) }}</span>
+    <template v-for="item in renderItems" :slot="item.dataIndex" slot-scope="text, record">
+      <a v-if="item.type === 'link'" :key="item.dataIndex" @click="item.onClick(record)">{{ text || item.linkText }}</a>
+      <span v-else-if="item.type === 'date'" :key="item.dataIndex">{{ $tool.transformDate(text) }}</span>
+      <span v-else-if="item.type === 'money'" :key="item.dataIndex">{{ $tool.toMoney(text) }}</span>
       <a-input
         v-else-if="item.type === 'input'"
         v-model="record[item.dataIndex]"
         :disabled="item.disabled"
         :placeholder="item.placeholder"
-        style="width: 100%;" />
+        style="width: 100%;"
+        :key="item.dataIndex"
+      />
       <a-select
         v-else-if="item.type === 'select'"
         v-model="record[item.dataIndex]"
         :disabled="item.disabled"
         :placeholder="item.placeholder"
         allowClear
-        style="width: 100%;">
+        style="width: 100%;"
+        :key="item.dataIndex"
+      >
         <a-select-option
           v-for="option in item.options"
           :key="option.value"
-          :value="option.value">
-          {{ option.label }}
-        </a-select-option>
+          :value="option.value"
+        >{{ option.label }}</a-select-option>
       </a-select>
       <a-radio-group
         v-if="item.type === 'radio'"
         v-model="record[item.dataIndex]"
         :options="item.options"
-        :disabled="item.disabled" />
-    </span>
+        :disabled="item.disabled"
+        :key="item.dataIndex"
+      />
+    </template>
+
     <template slot="footer">
       <slot name="footer" />
     </template>
-    <span v-for="item in slotItems" :key="item.dataIndex" :slot="item.scopedSlots.customRender" slot-scope="text, record">
-      <slot :name="item.scopedSlots.customRender" :text="text" :record="record" />
-    </span>
+
+    <template slot="title">
+      <slot name="title" />
+    </template>
+
+    <template v-for="item in slotItems" :slot="item.scopedSlots.customRender" slot-scope="text, record, index">
+      <slot :name="item.scopedSlots.customRender" :text="text" :record="record" :index="index" />
+    </template>
   </a-table>
 </template>
 
@@ -53,69 +65,87 @@
 export default {
   name: 'ActiveTable',
   props: {
+    columns: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
     rowKey: {
       type: String,
       default: ''
     },
-    columns: {
+    data: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
-    data: {
-      type: Array,
-      default () {
-        return []
+    size: {
+      type: String,
+      default: 'small'
+    },
+    bordered: {
+      type: Boolean,
+      default: false,
+    },
+    stripe: {
+      // 是否显示斑马纹
+      type: Boolean,
+      default: false,
+    },
+    rowSelect: {
+      // 开启单行选择
+      type: Boolean,
+      default: false,
+    },
+    multiSelect: {
+      // 开启多选
+      type: Boolean,
+      default: false
+    },
+    multiSelectDisabled: {
+      // 开启多选后， 是否disable多选的checkbox
+      type: Boolean,
+      default: false
+    },
+    multiSelectDefaultChecked: {
+      // 开启多选后，根据此key来判断每行默认选中状态
+      type: [Boolean, String, Function],
+      default: ''
+    },
+    rowSelection: {
+      type: Object,
+      default: () => {
+        return {}
       }
     },
     showPager: {
       type: Boolean,
-      default: false
-    },
-    bordered: {
-      type: Boolean,
-      default: true
-    },
-    stripe: { // 是否显示斑马纹
-      type: Boolean,
-      default: true
-    },
-    rowSelect: { // 开启单行选择
-      type: Boolean,
-      default: true
-    },
-    multiSelect: { // 开启多选
-      type: Boolean,
-      default: false
-    },
-    multiSelectDisabled: { // 开启多选后， 是否disable多选的checkbox
-      type: Boolean,
-      default: false
-    },
-    multiSelectDefaultChecked: { // 开启多选后，根据此key来判断每行默认选中状态
-      type: [Boolean, String, Function],
-      default: ''
-    },
-    currentPage: {
-      type: Number,
-      default: 1
+      default: false,
     },
     total: {
       type: Number,
-      default: 0
+    },
+    currentPage: {
+      type: Number,
+      default: 1,
+    },
+    pageSize: {
+      type: Number,
+      default: 10,
     }
   },
-  data () {
+  data() {
     return {
       selectedRowKeys: [],
       selectedRows: {},
       renderItems: [],
-      slotItems: []
+      slotItems: [],
     }
   },
   methods: {
-    setClassName (record, index) {
+    setClassName(record, index) {
       if (this.selectedRowKeys.indexOf(record[this.rowKey]) >= 0 && this.rowSelect) {
         return 'selected-row'
       } else {
@@ -125,11 +155,11 @@ export default {
         return index % 2 === 1 ? 'odd' : 'even'
       }
     },
-    handleTableChange (pagination, filters, sorter) {
+    handleTableChange(pagination, filters, sorter) {
       this.$emit('on-filter-change', filters)
       this.$emit('on-page-change', pagination)
     },
-    customRow (record) {
+    customRow(record) {
       if (!this.rowSelect) return {}
       return {
         props: {},
@@ -144,11 +174,11 @@ export default {
         }
       }
     },
-    onSelectChange (selectedRowKeys, selectedRows) {
+    onSelectChange(selectedRowKeys, selectedRows) {
       this.$emit('on-select-change', selectedRowKeys, selectedRows)
     },
     // 开启多选后 - 选择框的默认属性配置
-    getCheckboxProps (record) {
+    getCheckboxProps(record) {
       return {
         props: {
           defaultChecked: record[this.multiSelectDefaultChecked],
@@ -158,16 +188,23 @@ export default {
     }
   },
   computed: {
-    rowSelection () {
-      if (!this.multiSelect) return null
-      return { onChange: this.onSelectChange, getCheckboxProps: this.getCheckboxProps }
+    rowSelections() {
+      if (!this.multiSelect) {
+        if (this.rowSelection.hasOwnProperty('type')) {
+          return { getCheckboxProps: this.getCheckboxProps, type: this.rowSelection.type }
+        } else {
+          return
+        }
+      } else {
+        return { onChange: this.onSelectChange, getCheckboxProps: this.getCheckboxProps }
+      }
     },
     pagination () {
       if (!this.showPager) return false
-      return { showQuickJumper: true, total: this.total, current: this.currentPage }
+      return { showQuickJumper: true, total: this.total, current: this.currentPage, pageSize:this.pageSize }
     },
-    layout () {
-      /* eslint-disable */ 
+    layout() {
+      /* eslint-disable */
       this.selectedRowKeys = this.data.length > 0 ? [this.data[0][this.rowKey]] : []
       this.selectedRows = this.data.length > 0 ? this.data[0] : {}
       const columns = [...this.columns]
