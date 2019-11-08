@@ -1,6 +1,6 @@
 <template>
-<div class="main-container">
-  <div class="box1"></div>
+<div class="main-container" :style="`background-image: url(${require('@/assets/images/bg.jpg')})`">
+  <div class="box1"><m-card></m-card></div>
   <div class="box2">
     <m-card>
       <div style="height: 100%">
@@ -22,8 +22,11 @@
   <div class="box4"><m-card></m-card></div>
   <div class="box5"><m-card><Chart></Chart></m-card></div>
   <div class="box6">
-    <m-card>
-      <m-progress :percent="percent" :color="['#0176fe', '#4aecfd']" :hideInfo="true"/>
+    <m-card title="收入监控">
+      <div style="text-align: center;">
+        <m-brief style="margin: 0.5rem 0;" label="绩效" :count="3763175" unit="元"/>
+        <m-progress :percent="percent" :color="['#0176fe', '#4aecfd']"/>
+      </div>
     </m-card>
   </div>
 </div>
@@ -51,10 +54,10 @@ export default {
 
 <style lang="stylus" scoped>
 .main-container
-  background #0b131e
   width 100%
   height 100%
   display grid
+  background-size cover
   grid-template-areas \
     'box1 box1 box1'\
     'box2 box3 box4'\
@@ -65,7 +68,6 @@ export default {
   grid-gap 1rem
   padding 1rem
   .box1
-    background red
     grid-area box1
   .box2
     grid-area box2

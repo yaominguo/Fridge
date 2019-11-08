@@ -33,14 +33,13 @@ export default {
 
 <style lang="stylus" scoped>
 .brief-container
-  display flex
-  align-items flex-end
+  display inline-block
   color #fff
   font-size 0.8rem
   .label
     color $cardFontColor
     margin-right 0.5rem
   .count
-    font-size 1.2rem
+    font-size 1.4rem
     font-weight bold
 </style>

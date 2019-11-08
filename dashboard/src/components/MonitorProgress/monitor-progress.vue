@@ -1,9 +1,12 @@
 <template>
-  <div class="monitor-progress">
-    <div class="progress-container">
+  <div class="monitor-progress" :style="style">
+    <div class="progress-container" :style="containerStyle">
       <div class="progress-bar"/>
-      <div class="progress-bg"/>
+      <div class="progress-bg" :style="bgStyle"/>
     </div>
+    <b v-if="!hideInfo" class="progress-info">
+      <m-count :value="percent"/>%
+    </b>
   </div>
 </template>
 
@@ -17,7 +20,7 @@ export default {
     },
     color: {
       type: String | Array,
-      default: null,
+      default: '#0176fe',
     },
     size: {
       type: Number,
@@ -32,22 +35,51 @@ export default {
       default: 'active',
     }
   },
+  computed: {
+    style() {
+      if (!this.hideInfo) {
+        return {
+          width: '95%',
+        }
+      }
+      return {
+        width: '100%',
+      }
+    },
+    containerStyle() {
+      return {
+        height: `${Math.round(this.size / 10)}rem`,
+        width: `${this.percent}%`,
+      }
+    },
+    bgStyle() {
+      if ('string' === typeof this.color) {
+        return {
+          background: this.color
+        }
+      } else {
+        return {
+          background: `linear-gradient(90deg, ${this.color[0]}, ${this.color[1]})`
+        }
+      }
+    },
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
 $radius = 2rem
 .monitor-progress
-  width 100%
-  padding 0.4rem 0.5rem
+  padding 0.5rem 0.6rem
+  position relative
   border-radius $radius
-  background transparent
+  background rgba(0,0,0,0.18)
   box-shadow inset 0 0 0.2rem 0 #000
   .progress-container
-    width 100%
+    width 0
     position relative
-    height 2rem
     border-radius $radius
+    transition width 2s ease
     div
       position: absolute
       top 0
@@ -55,14 +87,24 @@ $radius = 2rem
       width 100%
       height 100%
       border-radius $radius
-      &.progress-bg
-        background linear-gradient(90deg, #0176fe, #4aecfd)
       &.progress-bar
-        background-position 0%
         z-index 1
         opacity 0.2
         background-image repeating-linear-gradient(45deg, #fff, #fff 0.8rem, transparent 0.8rem, transparent 1.4rem)
-        animation loading-slide 1s linear infinite
+        background-size 10rem
+        animation loading-slide 30s linear infinite running
+  .progress-info
+    display flex
+    align-items center
+    justify-content center
+    width 5%
+    position absolute
+    right -5%
+    top 0
+    color $edgeColor
+    font-size 1.6rem
+    height 100%
+    text-shadow 0 0 0.6rem $edgeColor
 @keyframes loading-slide
   to
     background-position 100%

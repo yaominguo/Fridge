@@ -1,6 +1,12 @@
 <template>
   <div class="card-wrapper">
-    <div class="card-title">收入监控</div>
+    <div class="card-title">
+      <span class="s"/>
+      <span class="m"/>
+      <p>{{title}}</p>
+      <span class="m"/>
+      <span class="s"/>
+    </div>
     <div class="edge left-top"/>
     <div class="edge right-top"/>
     <div class="edge left-bottom"/>
@@ -13,11 +19,18 @@
 
 <script>
 export default {
-  name: 'MonitorCard'
+  name: 'MonitorCard',
+  props: {
+    title: {
+      type: String,
+      default: '标题',
+    },
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
+$edgeWidth = -0.1rem
 .card-wrapper
   background $cardBg
   border $cardBorder
@@ -26,36 +39,51 @@ export default {
   padding 0.5rem 1rem
   position relative
   .card-title
+    display flex
+    align-items center
     color $cardFontColor
     border-bottom $cardBorder
     padding-bottom 0.5rem
     font-size 1.2rem
-    font-weight bold
+    font-weight 460
+    p
+      margin 0 0.5rem
+    span
+      display inline-block
+      background $edgeColor
+      margin 0 0.1rem
+      &.s
+        width 0.2rem
+        height 1rem
+        opacity 0.5
+      &.m
+        width 0.3rem
+        height 1.2rem
   .edge
     position absolute
     width 1rem
     height 1rem
-    border: 0.1rem solid $edgeColor
+    border: 0.12rem solid $edgeColor
     &.left-top
       border-right-color transparent
       border-bottom-color transparent
-      top 0
-      left 0
+      top $edgeWidth
+      left $edgeWidth
     &.right-top
       border-left-color transparent
       border-bottom-color transparent
-      top 0
-      right 0
+      top $edgeWidth
+      right $edgeWidth
     &.left-bottom
       border-right-color transparent
       border-top-color transparent
-      bottom 0
-      left 0
+      bottom $edgeWidth
+      left $edgeWidth
     &.right-bottom
       border-left-color transparent
       border-top-color transparent
-      bottom 0
-      right 0
+      bottom $edgeWidth
+      right $edgeWidth
     &.shadow
       background $edgeColor
       height 24%
