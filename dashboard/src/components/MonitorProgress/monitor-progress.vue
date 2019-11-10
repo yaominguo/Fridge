@@ -4,7 +4,7 @@
       <div class="progress-bar"/>
       <div class="progress-bg" :style="bgStyle"/>
     </div>
-    <b v-if="!hideInfo" class="progress-info">
+    <b v-if="!hideInfo" class="progress-info" :style="infoStyle">
       <m-count :value="percent"/>%
     </b>
   </div>
@@ -30,21 +30,19 @@ export default {
       type: Boolean,
       default: false,
     },
-    status: {
-      type: String,
-      default: 'active',
-    }
   },
   computed: {
     style() {
+      const size = Math.round(this.size / 10)
+      const result = {
+        padding: `${(size / 5).toFixed(1)}rem ${(size / 4.5).toFixed(1)}rem`,
+      }
       if (!this.hideInfo) {
-        return {
-          width: '95%',
-        }
+        result.width = '93%'
+      } else {
+        result.width = '100%'
       }
-      return {
-        width: '100%',
-      }
+      return result
     },
     containerStyle() {
       return {
@@ -63,6 +61,11 @@ export default {
         }
       }
     },
+    infoStyle() {
+      return {
+        fontSize: `${(this.size * 0.7 / 10).toFixed(1)}rem`,
+      }
+    },
   }
 }
 </script>
@@ -70,7 +73,6 @@ export default {
 <style lang="stylus" scoped>
 $radius = 2rem
 .monitor-progress
-  padding 0.5rem 0.6rem
   position relative
   border-radius $radius
   background rgba(0,0,0,0.18)
@@ -90,22 +92,21 @@ $radius = 2rem
       &.progress-bar
         z-index 1
         opacity 0.2
-        background-image repeating-linear-gradient(45deg, #fff, #fff 0.8rem, transparent 0.8rem, transparent 1.4rem)
-        background-size 10rem
-        animation loading-slide 30s linear infinite running
+        background-image repeating-linear-gradient(45deg, #fff, #fff 0.8rem, transparent 0.8rem, transparent 1.2rem)
+        background-size 17rem
+        animation rolling 10s linear infinite running
   .progress-info
     display flex
     align-items center
     justify-content center
-    width 5%
+    width 7%
     position absolute
-    right -5%
+    right -7%
     top 0
     color $edgeColor
-    font-size 1.6rem
     height 100%
     text-shadow 0 0 0.6rem $edgeColor
-@keyframes loading-slide
+@keyframes rolling
   to
-    background-position 100%
+    background-position-x 17rem
 </style>

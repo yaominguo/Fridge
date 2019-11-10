@@ -18,8 +18,27 @@
       </div>
     </m-card>
   </div>
-  <div class="box3"><m-card></m-card></div>
-  <div class="box4"><m-card></m-card></div>
+  <div class="box3">
+    <m-card>
+      <div class="chart-wrapper"><Chart/></div>
+      <div>
+        <p style="color: #ccc">收入组成</p>
+        <br>
+        <div style="display: flex;margin-bottom: 0.5rem;"><span style="color: #0eb2ee; width: 15%;text-align: right;">人力制</span> <div style="width: 85%;margin-left: 1rem"><m-progress :percent="percent" :size="14"/></div></div>
+        <div style="display: flex;margin-bottom: 0.5rem;"><span style="color: #0eb2ee; width: 15%;text-align: right;">项目制</span> <div style="width: 85%;margin-left: 1rem"><m-progress :percent="percent" :size="14"/></div></div>
+        <div style="display: flex;margin-bottom: 4rem;"><span style="color: #0eb2ee; width: 15%;text-align: right;">其他收入</span> <div style="width: 85%;margin-left: 1rem"><m-progress :percent="percent" :size="14"/></div></div>
+        <div style="text-align: right">
+          <m-brief label="人均收入" :count="13417" unit="元"/>
+        </div>
+      </div>
+    </m-card>
+  </div>
+  <div class="box4">
+    <m-card>
+      <div class="chart-wrapper"><Chart/></div>
+      <div></div>
+    </m-card>
+  </div>
   <div class="box5"><m-card><Chart></Chart></m-card></div>
   <div class="box6">
     <m-card title="收入监控">
@@ -46,8 +65,8 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.percent = 80
-    }, 100)
+      this.percent = 50
+    }, 1000)
   }
 }
 </script>
@@ -79,4 +98,8 @@ export default {
     grid-area box5
   .box6
     grid-area box6
+.chart-wrapper
+  height 48%
+  margin-bottom 1rem
+  border-bottom $cardBorder
 </style>
