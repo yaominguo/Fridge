@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 
@@ -20,17 +20,17 @@ export default {
   font-family Microsoft YaHei UI
   src url(./assets/font/Microsoft-YaHei-UI-Bold.ttf)
 html, body
+  background #000
   width 100%
   height 100%
-  font-size 1vw
   user-select none
 #app
-  /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
   font-family DIN, 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   width 100%
   height 100%
+  font-size 1rem
   overflow: hidden
   color $fontColor
 </style>

@@ -68,7 +68,7 @@ export default {
         series: [
           {
             type: 'bar',
-            barWidth: '30%',
+            barWidth: '40%',
             barGap: 0,
             itemStyle: {
               shadowColor: '#1ce8ff',
@@ -79,20 +79,6 @@ export default {
               ])
             },
             data: [10, 20, 30, 40, 50, 60, 10, 20, 30, 40, 50, 60],
-          },
-          {
-            type: 'bar',
-            barWidth: '30%',
-            barGap: 0,
-            itemStyle: {
-              shadowColor: '#c16ad6',
-              shadowBlur: 6,
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {offset: 0, color: '#c16ad6'},
-                {offset: 1, color: '#3725b2'}
-              ])
-            },
-            data: [20, 40, 60, 40, 50, 10, 30, 40, 60, 40, 50, 10],
           },
         ],
       }
@@ -108,7 +94,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chart
-  height 100%
-  width 100%
+  .chart
+    height 100%
+    width 100%
 </style>

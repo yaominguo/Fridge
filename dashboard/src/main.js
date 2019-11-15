@@ -5,7 +5,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
-import {Button} from 'view-design'
+import {Button, Divider} from 'view-design'
 import MonitorCard from '@/components/MonitorCard'
 import MonitorCount from '@/components/MonitorCount'
 import MonitorBrief from '@/components/MonitorBrief'
@@ -19,6 +19,7 @@ Vue.use(MonitorCount)
 Vue.use(MonitorBrief)
 Vue.use(MonitorProgress)
 Vue.component('Button', Button)
+Vue.component('Divider', Divider)
 
 /* eslint-disable no-new */
 new Vue({

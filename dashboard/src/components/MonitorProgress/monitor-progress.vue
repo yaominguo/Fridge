@@ -24,12 +24,16 @@ export default {
     },
     size: {
       type: Number,
-      default: 20,
+      default: 14,
     },
-    hideInfo: {
+    'hide-info': {
       type: Boolean,
       default: false,
     },
+    'text-inside': {
+      type: Boolean,
+      default: false,
+    }
   },
   computed: {
     style() {
@@ -37,16 +41,20 @@ export default {
       const result = {
         padding: `${(size / 5).toFixed(1)}rem ${(size / 4.5).toFixed(1)}rem`,
       }
-      if (!this.hideInfo) {
-        result.width = '93%'
+      if (!this.hideInfo && !this.textInside) {
+        result.width = '90%'
       } else {
-        result.width = '100%'
+        if (this.percent >= 95) {
+          result.width = '90%'
+        } else {
+          result.width = '100%'
+        }
       }
       return result
     },
     containerStyle() {
       return {
-        height: `${Math.round(this.size / 10)}rem`,
+        height: `${(this.size / 10).toFixed(1)}rem`,
         width: `${this.percent}%`,
       }
     },
@@ -62,8 +70,18 @@ export default {
       }
     },
     infoStyle() {
+      let info = {
+        left: '102%'
+      }
+      if (this.textInside && this.percent < 95) {
+        info = {
+          left: `${this.percent + 1}%`,
+        }
+      }
       return {
+        ...info,
         fontSize: `${(this.size * 0.7 / 10).toFixed(1)}rem`,
+        color: 'string' === typeof this.color ? this.color : this.color[1],
       }
     },
   }
@@ -92,20 +110,19 @@ $radius = 2rem
       &.progress-bar
         z-index 1
         opacity 0.2
-        background-image repeating-linear-gradient(45deg, #fff, #fff 0.8rem, transparent 0.8rem, transparent 1.2rem)
         background-size 17rem
-        animation rolling 10s linear infinite running
+        background-image repeating-linear-gradient(45deg, #fff, #fff 0.8rem, transparent 0.8rem, transparent 1.2rem)
+        animation rolling 20s linear infinite running
   .progress-info
     display flex
     align-items center
     justify-content center
-    width 7%
     position absolute
-    right -7%
+    left 0
     top 0
-    color $edgeColor
     height 100%
-    text-shadow 0 0 0.6rem $edgeColor
+    transition left 2s ease
+    text-shadow 0 0 0.6rem rgba(255,255,255,0.5)
 @keyframes rolling
   to
     background-position-x 17rem
