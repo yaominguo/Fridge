@@ -113,10 +113,11 @@ export default {
     'box2 box3 box4'\
     'box5 box3 box4'\
     'box6 box6 box6'
-  grid-template-rows auto 3fr 3fr 2fr
+  grid-template-rows 4rem auto auto 9rem
+  // grid-template-rows auto 3fr 3fr 2fr
   grid-template-columns 1fr 1fr 1fr
-  grid-gap 0.8rem
-  padding 1rem
+  grid-gap 0.7rem
+  padding 0.7rem
   .box1
     grid-area box1
   .box2

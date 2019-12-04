@@ -42,10 +42,10 @@ export default {
         padding: `${(size / 5).toFixed(1)}rem ${(size / 4.5).toFixed(1)}rem`,
       }
       if (!this.hideInfo && !this.textInside) {
-        result.width = '90%'
+        result.width = '85%'
       } else {
         if (this.percent >= 95) {
-          result.width = '90%'
+          result.width = '85%'
         } else {
           result.width = '100%'
         }
@@ -55,7 +55,7 @@ export default {
     containerStyle() {
       return {
         height: `${(this.size / 10).toFixed(1)}rem`,
-        width: `${this.percent}%`,
+        width: `${this.percent >= 100 ? 100 : this.percent}%`,
       }
     },
     bgStyle() {

@@ -76,7 +76,7 @@ export default {
       b
         font-size 1.8rem
     .divider
-      margin 0 3rem
+      margin 0 2.4rem
       background $edgeColor
       opacity 0.5
 </style>

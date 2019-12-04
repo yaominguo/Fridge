@@ -2,7 +2,7 @@
 <ICountUp
   :delay="delay"
   :endVal="value"
-  :options="options"
+  :options="config"
   @ready="onReady"
   />
 </template>
@@ -22,6 +22,10 @@ export default {
     value: {
       type: Number,
       default: 0,
+    },
+    decimal: { // 默认保留2位小数点
+      type: Number,
+      default: 2,
     },
     options: {
       type: Object,
@@ -44,6 +48,11 @@ export default {
       type: Number,
       default: 1,
     },
+  },
+  computed: {
+    config() {
+      return Object.assign(this.options, {decimalPlaces: this.decimal})
+    }
   },
   methods: {
     onReady(instance, countup) {

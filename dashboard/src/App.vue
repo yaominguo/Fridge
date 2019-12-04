@@ -19,6 +19,9 @@ export default {
 @font-face
   font-family Microsoft YaHei UI
   src url(./assets/font/Microsoft-YaHei-UI-Bold.ttf)
+@font-face
+  font-family Pangmenzhengdao
+  src url(./assets/font/pangmenzhengdao.ttf)
 html, body
   background #000
   width 100%
@@ -33,4 +36,23 @@ html, body
   font-size 1rem
   overflow: hidden
   color $fontColor
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+// /* 滚动槽 */
+// ::-webkit-scrollbar-track {
+//   -webkit-box-shadow: inset006pxrgba(0,0,0,0.3);
+//   /* border-radius: 10px; */
+// }
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  /* border-radius: 10px; */
+  background:rgba(91, 213, 255, 0.2)
+  -webkit-box-shadow:inset006pxrgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background:rgba(91, 213, 255, 0.2)
+}
 </style>
