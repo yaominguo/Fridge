@@ -4,7 +4,7 @@
     <ThemeTitle>广东省生产专题</ThemeTitle>
     <div class="area">
       <p>当前广东省养殖面积</p>
-      <b><m-flip :value="888888888"/></b>
+      <b><m-flip :value="828688678"/></b>
       <span>k㎡</span>
     </div>
     <div class="box1">
@@ -19,7 +19,7 @@
     </div>
     <div class="box3">
       <m-card mode="2" title="各品种养殖/出塘数据">
-        <ProductionChart />
+        <m-chart :showLegend="false" :options="options" :data="data" />
       </m-card>
     </div>
   </div>
@@ -28,14 +28,12 @@
 <script>
 import DataList from './components/list'
 import ThemeTitle from './components/title'
-import ProductionChart from './components/production-chart.vue'
 import GuangdongMap from './components/map'
 export default {
   name: 'GDProduction',
   components: {
     DataList,
     ThemeTitle,
-    ProductionChart,
     GuangdongMap,
   },
   data() {
@@ -76,7 +74,30 @@ export default {
         {name: '潮州市', value: 3679, unit: 'k㎡'},
         {name: '揭阳市', value: 5240.5, unit: 'k㎡'},
         {name: '云浮市', value: 7785.11, unit: 'k㎡'},
-      ]
+      ],
+      options: {
+        xAxis: {
+          data: ['淡水育苗', '淡水鱼种', '投放鱼种', '稚鳖', '稚龟', '鳗苗捕捞', '海水鱼苗', '虾类育苗', '贝类育苗', '海带', '紫菜', '海参'],
+        },
+        yAxis: {
+          name: '(吨)',
+          interval: 2000,
+        },
+        series: {
+          type: 'bar',
+          itemStyle: {
+            shadowColor: '#0076FF',
+            shadowBlur: 6,
+            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {offset: 0, color: '#1FECFF'},
+              {offset: 1, color: '#B645FF'}
+            ])
+          },
+        }
+      },
+      data: [
+        {data: [6500, 8500, 6000, 4600, 5600, 8500, 6000, 2500, 4500, 6500, 4500, 8000]},
+      ],
     }
   },
 }
@@ -84,21 +105,13 @@ export default {
 
 <style lang="stylus" scoped>
 #container
-  width 100%
-  height 100%
-  background-size cover
-  background-position center
-  background-color #061627
-  position relative
-  display grid
+  $gd-layout()
   grid-template-areas \
     'box1 . box2'\
     'box1 . box2'\
     'box3 box3 box2'
   grid-template-rows 1fr 1fr 1fr
   grid-template-columns 1fr 3fr 1fr
-  grid-gap 0.7rem
-  padding 0.7rem
   .box1
     grid-area box1
   .box2

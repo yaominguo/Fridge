@@ -1,11 +1,23 @@
-// 疫病灾害分析专题 - 疫情情况趋势
+// 产业布局分析专题 - 各品种鱼苗数量
 <template>
-  <div class="chart" ref="chart"/>
+<div class="wrapper">
+  <div class="chart" ref="chart" />
+  <Select v-model="theme" class="select" size="small">
+    <Option v-for="item in themes" :value="item" :key="item">{{ item }}</Option>
+  </Select>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'DiseaseTrend',
+  name: 'FishChart',
+  data() {
+    return {
+      theme: '淡水鱼',
+      themes: ['淡水鱼', '海水鱼'],
+      dates: ['2014年', '2015年', '2016年', '2017年', '2018年'],
+    }
+  },
   mounted() {
     this.init()
   },
@@ -14,13 +26,24 @@ export default {
       const chart = this.$echarts.init(this.$refs.chart)
       const options = {
         grid: {
-          top: '50px',
-          left: '30px',
-          right: '30px',
+          top: '25%',
+          left: '3%',
+          right: '3%',
           bottom: '5px',
           width: 'auto',
           height: 'auto',
           containLabel: true,
+        },
+        legend: {
+          top: '5%',
+          left: '6%',
+          width: '100%',
+          data: this.themes,
+          itemWidth: 15,
+          textStyle: {
+            color: '#ccc',
+            fontSize: this.fontSize,
+          },
         },
         tooltip: {
           trigger: 'axis',
@@ -30,7 +53,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          data: this.dates,
           axisLabel: {
             textStyle: {
               color: '#ccc',
@@ -50,15 +73,15 @@ export default {
           }
         },
         yAxis: {
-          name: '(次)',
+          name: '(亿尾)',
           nameTextStyle: {
             color: '#fff',
             fontSize: this.fontSize,
           },
           type: 'value',
-          interval: 2,
-          min: 0,
-          max: 10,
+          interval: 200,
+          min: 8000,
+          max: 9000,
           splitLine: {
             show: true,
             lineStyle: {
@@ -79,14 +102,17 @@ export default {
         },
         series: [
           {
-            type: 'line',
-            areaStyle: {
-              color: 'rgba(0, 118, 255, 0.5)'
-            },
+            type: 'bar',
+            barWidth: '50%',
             itemStyle: {
-              color: 'rgba(0, 118, 255, 1)'
+              shadowColor: '#0076FF',
+              shadowBlur: 6,
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {offset: 0, color: '#1FECFF'},
+                {offset: 1, color: '#0076FF'}
+              ])
             },
-            data: [2,5,8,3,1,6,4,5,8,4,3,4],
+            data: [8700,8300,8500,8400,8300],
           },
         ],
       }
@@ -102,7 +128,16 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chart
-  height 100%
+.wrapper
+  position relative
   width 100%
+  height 100%
+  .chart
+    height 100%
+    width 100%
+  .select
+    position absolute
+    top 1rem
+    right 1rem
+    width 8rem
 </style>

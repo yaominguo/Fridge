@@ -7,6 +7,7 @@ const GDProduction = () => import('@/views/guangdong/gd-production')
 const GDTrade = () => import('@/views/guangdong/gd-trade')
 const GDDisease = () => import('@/views/guangdong/gd-disease')
 const GDFish = () => import('@/views/guangdong/gd-fish')
+const GDIndustry = () => import('@/views/guangdong/gd-industry')
 const MapTest = () => import('@/views/map-test')
 const Map3D = () => import('@/views/3d-map')
 
@@ -43,6 +44,11 @@ export default new Router({
       path: '/fish',
       name: 'fish',
       component: GDFish
+    },
+    {
+      path: '/industry',
+      name: 'industry',
+      component: GDIndustry
     },
     {
       path: '/map2',

@@ -12,6 +12,7 @@ export default {
 
 <style lang="stylus">
 @import './assets/css/variables.styl'
+@import './assets/css/reset.styl'
 
 @font-face
   font-family DIN

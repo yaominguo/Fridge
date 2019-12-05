@@ -4,9 +4,8 @@
 </template>
 
 <script>
-import { log } from 'util'
 export default {
-  name: 'DiseaseTrend',
+  name: 'DiseasePie',
   data() {
     return {
       data: [

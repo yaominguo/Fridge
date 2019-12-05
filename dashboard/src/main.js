@@ -5,10 +5,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import echarts from 'echarts'
-import {Button, Divider, Progress} from 'view-design'
+import {Button, Divider, Progress, Select, Option} from 'view-design'
 import ajax from '@/server/ajax'
 import api from '@/server/api'
 import MonitorCard from '@/components/MonitorCard'
+import MonitorChart from '@/components/MonitorChart'
 import MonitorCount from '@/components/MonitorCount'
 import MonitorFlip from '@/components/MonitorFlip'
 import MonitorBrief from '@/components/MonitorBrief'
@@ -24,9 +25,12 @@ Vue.use(MonitorCount)
 Vue.use(MonitorFlip)
 Vue.use(MonitorBrief)
 Vue.use(MonitorProgress)
+Vue.use(MonitorChart)
 Vue.component('Button', Button)
 Vue.component('Divider', Divider)
 Vue.component('Progress', Progress)
+Vue.component('Select', Select)
+Vue.component('Option', Option)
 
 /* eslint-disable no-new */
 new Vue({

@@ -24,6 +24,7 @@ export default {
   },
   methods: {
     calcPercent(val) {
+      if (!val || val < 0) return 0
       const percent = Math.round((val / 50) * 100)
       return percent >= 100 ? 100 : percent
     }

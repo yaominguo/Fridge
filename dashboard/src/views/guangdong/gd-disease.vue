@@ -19,7 +19,7 @@
     </div>
     <div class="box3">
       <m-card mode="2" title="疫情情况趋势">
-        <DiseaseTrend />
+        <m-chart :showLegend="false" :options="options" :data="data"/>
       </m-card>
     </div>
     <div class="box4">
@@ -34,7 +34,6 @@
 import DataList from './components/list'
 import DiseaseList from './components/disease-list'
 import ThemeTitle from './components/title'
-import DiseaseTrend from './components/disease-trend.vue'
 import DiseasePie from './components/disease-pie.vue'
 import GuangdongMap from './components/map'
 export default {
@@ -43,12 +42,31 @@ export default {
     DataList,
     DiseaseList,
     ThemeTitle,
-    DiseaseTrend,
     DiseasePie,
     GuangdongMap,
   },
   data() {
     return {
+      options: {
+        xAxis: {
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+          boundaryGap: false,
+        },
+        yAxis: {
+          name: '(次)',
+          min: 0,
+          max: 10,
+          interval: 2,
+        },
+        series: {
+          type: 'line',
+          areaStyle: {},
+        },
+        colors: ['rgba(0, 118, 255, 1)'],
+      },
+      data: [
+        {data: [2,5,8,3,1,6,4,5,8,4,3,4]}
+      ],
       list1: [
         {name: '淡水鱼苗', value: 8279, unit: '亿尾'},
         {name: '淡水鱼种', value: 222544, unit: '吨'},
@@ -93,21 +111,13 @@ export default {
 
 <style lang="stylus" scoped>
 #container
-  width 100%
-  height 100%
-  background-size cover
-  background-position center
-  background-color #061627
-  position relative
-  display grid
+  $gd-layout()
   grid-template-areas \
     'box1 . . . box2'\
     'box1 . . . box2'\
     'box3 box3 box4 box4 box2'
   grid-template-rows 1fr 1fr 1fr
   grid-template-columns 1.2fr 1fr 1fr 1fr 1.2fr
-  grid-gap 0.7rem
-  padding 0.7rem
   .sum
     display flex
     justify-content space-around

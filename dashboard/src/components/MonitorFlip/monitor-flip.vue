@@ -42,4 +42,6 @@ export default {
     background linear-gradient($color-map() 47%, transparent 50%, $color-map() 53%)
     margin-right 0.4rem
     padding 0 0.4rem
+  .odometer-digit-inner
+    padding 0 0.4rem
 </style>

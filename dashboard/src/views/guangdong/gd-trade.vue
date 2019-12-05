@@ -14,12 +14,12 @@
     </div>
     <div class="box3">
       <m-card mode="2" title="采购供应数据">
-        <PurchaseChart />
+        <m-chart :options="options1" :data="data1" />
       </m-card>
     </div>
     <div class="box4">
       <m-card mode="2" title="累计违规举报次数">
-        <ReportChart />
+        <m-chart :showLegend="false" :options="options2" :data="data2" />
       </m-card>
     </div>
   </div>
@@ -29,8 +29,6 @@
 import DataList from './components/list'
 import ProgressList from './components/progress-list'
 import ThemeTitle from './components/title'
-import ReportChart from './components/report-chart.vue'
-import PurchaseChart from './components/purchase-chart.vue'
 import GuangdongMap from './components/map'
 export default {
   name: 'GDProduction',
@@ -38,8 +36,6 @@ export default {
     DataList,
     ProgressList,
     ThemeTitle,
-    PurchaseChart,
-    ReportChart,
     GuangdongMap,
   },
   data() {
@@ -71,7 +67,54 @@ export default {
         {name: '海带', value: 28, unit: '元/斤'},
         {name: '紫菜', value: 4, unit: '元/斤'},
         {name: '海参', value: 200, unit: '元/斤'},
-      ]
+      ],
+      options1: {
+        colors: [['#1FECFF', '#0076FF'], ['#c16ad6', '#3725b2']],
+        legend: {
+          top: 20,
+          right: 10,
+          left: 'auto',
+        },
+        xAxis: {
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        },
+        yAxis: {
+          name: '(吨)',
+          interval: 2000,
+        },
+        series: {
+          type: 'bar',
+          barWidth: '30%',
+          barGap: 0,
+        }
+      },
+      data1: [
+        {name: '供应数据', data: [6500, 8500, 6000, 4600, 5600, 8500, 6000, 2500, 4500, 6500, 4500, 8000]},
+        {name: '采购数据', data: [5500, 9000, 5000, 3600, 4600, 7500, 7000, 3500, 5500, 7500, 5500, 6700]},
+      ],
+      options2: {
+        xAxis: {
+          data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        },
+        yAxis: {
+          name: '(次)',
+          interval: 20,
+        },
+        series: {
+          type: 'bar',
+          itemStyle: {
+            shadowColor: '#0076FF',
+            shadowBlur: 6,
+            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {offset: 0, color: '#1FECFF'},
+              {offset: 1, color: '#0076FF'}
+            ])
+          },
+        }
+      },
+      data2: [
+        {data: [30, 50, 10, 60, 70, 40, 50, 70, 30, 50, 90, 58]},
+      ],
     }
   },
 }
@@ -79,21 +122,13 @@ export default {
 
 <style lang="stylus" scoped>
 #container
-  width 100%
-  height 100%
-  background-size cover
-  background-position center
-  background-color #061627
-  position relative
-  display grid
+  $gd-layout()
   grid-template-areas \
     'box1 . . box2'\
     'box1 . . box2'\
     'box3 box3 box4 box4'
   grid-template-rows 1fr 1fr 1fr
   grid-template-columns 1fr 1.2fr 1.2fr 1fr
-  grid-gap 0.7rem
-  padding 0.7rem
   .box1
     grid-area box1
   .box2

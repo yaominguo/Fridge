@@ -67,21 +67,13 @@ export default {
 
 <style lang="stylus" scoped>
 #container
-  width 100%
-  height 100%
-  background-size cover
-  background-position center
-  background-color #061627
-  position relative
-  display grid
+  $gd-layout()
   grid-template-areas \
     '. . . box1'\
     '. . . box1'\
     'box2 box2 box3 box3'
   grid-template-rows 1fr 1fr 1fr
   grid-template-columns 2fr 1fr 1fr 2fr
-  grid-gap 0.7rem
-  padding 0.7rem
   .flag
     display flex
     position absolute
