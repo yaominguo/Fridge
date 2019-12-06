@@ -31,7 +31,9 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(this.init)
+    if (this.data.length > 0) {
+      this.$nextTick(this.init)
+    }
   },
   methods: {
     init() {
@@ -46,12 +48,20 @@ export default {
 
       options.grid = Object.assign(this.defaultOptions.grid, this.options.grid)
       options.tooltip = Object.assign(this.defaultOptions.tooltip, this.options.tooltip)
-      options.xAxis = Object.assign(this.defaultOptions.xAxis, this.options.xAxis)
-      options.yAxis = Object.assign(this.defaultOptions.yAxis, this.options.yAxis)
       if(this.showLegend) {
         options.legend = Object.assign(this.defaultOptions.legend, this.options.legend)
+        if (this.options.series.type === 'pie') {
+          options.color = this.options.color || colors
+          options.series = [this.options.series]
+          options.series[0].data = options.legend.data = this.data
+          return options
+        }
         options.legend.data = this.data.map(item => item.name)
       }
+      options.xAxis = Object.assign(this.defaultOptions.xAxis, this.options.xAxis)
+      options.yAxis = Object.assign(this.defaultOptions.yAxis, this.options.yAxis)
+      console.log(this.data)
+
       options.series = this.data.map((item, index) => {
         let color = colors[index]
         if (Array.isArray(color)) {
@@ -152,7 +162,16 @@ export default {
       // return Math.floor(window.innerWidth / 100) - 1
       return Math.floor(screen.height * 1.48 / 100)
     },
-  }
+  },
+  watch: {
+    data(cur, past) {
+      console.log('sss', cur, past)
+
+      if (cur && cur !== past && cur.length > 0) {
+        this.init()
+      }
+    }
+  },
 }
 </script>
 

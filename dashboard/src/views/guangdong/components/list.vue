@@ -3,7 +3,7 @@
     <li class="row" v-for="(item, i) in list" :key="item.name + i">
       <p>{{item.name}}</p>
       <p>
-        <b><m-count :value="item.value"/></b>
+        <b><m-count :value="item.value" :decimal="decimal"/></b>
         <span>{{item.unit}}</span>
       </p>
     </li>
@@ -19,7 +19,11 @@ export default {
       default() {
         return []
       }
-    }
+    },
+    decimal: { // 默认保留2位小数点
+      type: Number,
+      default: 2,
+    },
   }
 }
 </script>

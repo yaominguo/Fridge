@@ -3,14 +3,14 @@
     <li class="row">
       <p>市</p>
       <p>次数</p>
-      <p>面积(k㎡)</p>
+      <p>面积(亩)</p>
       <p>损失(万元)</p>
     </li>
     <li class="row" v-for="(item, i) in list" :key="item.name + i">
       <p>{{item.name}}</p>
       <p><m-count :value="item.count" :decimal="0"/></p>
       <p><m-count :value="item.area"/></p>
-      <p><b><m-count :value="item.lose"/></b></p>
+      <p><b><m-count :value="item.loss"/></b></p>
     </li>
   </ul>
 </template>

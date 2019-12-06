@@ -1,11 +1,26 @@
 <template>
+<div class="map-wrapper">
   <div id="map" />
+  <div v-if="data.length > 0" class="visualmap">
+    <p>高</p>
+    <div class="bar" />
+    <p>低</p>
+  </div>
+</div>
 </template>
 
 <script>
 import guangdong from 'echarts/map/json/province/guangdong.json'
 export default {
   name: 'GuangdongMap',
+  props: {
+    data: {
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
   data() {
     return {
       locations: [],
@@ -19,6 +34,9 @@ export default {
         {name: 'test', value: [115.980637, 23.125178]},
         {name: 'test', value: [114.780637, 24.125178]},
       ],
+      config: {},
+      map: null,
+      mapName: 'guangdong',
     }
   },
   mounted() {
@@ -26,7 +44,6 @@ export default {
   },
   methods: {
     initMap() {
-      const mapName = 'guangdong'
       // 调整label坐标位置
       guangdong.features.forEach(el => {
         switch (el.properties.name) {
@@ -74,11 +91,11 @@ export default {
         }
         this.locations.push({name: el.properties.name, value: el.properties.cp})
       })
-      this.$echarts.registerMap(mapName, guangdong)
-      const map = this.$echarts.init(document.getElementById('map'))
-      const config = {
+      this.$echarts.registerMap(this.mapName, guangdong)
+      this.map = this.$echarts.init(document.getElementById('map'))
+      this.config = {
         geo: {
-          map: mapName,
+          map: this.mapName,
           top: 80,
           label: {
             normal: {
@@ -104,31 +121,31 @@ export default {
           },
         },
         series: [
-          {
-            name: '散点',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            data: this.testData,
-            symbolSize: 10,
-            label: {
-              normal: {
-                show: false,
-              },
-              emphasis: {
-                show: true,
-                formatter: '{b}',
-                position: 'right',
-                rotate: 28,
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#5BD5FF',
-                shadowColor: '#5BD5FF',
-                shadowBlur: 2
-              }
-            }
-          },
+          // {
+          //   name: '散点',
+          //   type: 'scatter',
+          //   coordinateSystem: 'geo',
+          //   data: this.testData,
+          //   symbolSize: 10,
+          //   label: {
+          //     normal: {
+          //       show: false,
+          //     },
+          //     emphasis: {
+          //       show: true,
+          //       formatter: '{b}',
+          //       position: 'right',
+          //       rotate: 28,
+          //     }
+          //   },
+          //   itemStyle: {
+          //     normal: {
+          //       color: '#5BD5FF',
+          //       shadowColor: '#5BD5FF',
+          //       shadowBlur: 2
+          //     }
+          //   }
+          // },
           {
             name: '市',
             type: 'scatter',
@@ -157,21 +174,61 @@ export default {
           },
         ],
       }
-      map.setOption(config)
+      this.map.setOption(this.config)
     },
   },
   computed: {
     fontSize() {
       return Math.floor(window.innerWidth / 100) - 1
     },
+  },
+  watch: {
+    data(cur, past) {
+      if (cur && cur !== past && cur.length > 0) {
+        this.config.series.push({
+          type: 'map',
+          map: this.mapName,
+          geoIndex: 0,
+          data: this.data,
+        })
+        this.config.visualMap = {
+          show: false,
+          // min: 0,
+          // max: 60000,
+          // left: '30%',
+          // rotate: 28,
+          // id: 'test',
+          // text:['High','Low'],
+          // realtime: false,
+          // calculable: true,
+          inRange: {
+            color: ['rgba(91, 213, 255, 0.3)', 'rgba(91, 213, 255, 0.8)']
+          }
+        }
+        this.map.setOption(this.config)
+      }
+    }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-#map
+.map-wrapper
   width 100%
   height 100%
   position absolute
-  transform rotate(28deg)
+  #map
+    width 100%
+    height 100%
+    transform rotate(28deg)
+  .visualmap
+    color #fff
+    position: absolute;
+    top: 20%;
+    left: 30%;
+    text-align center
+    .bar
+      width 2rem
+      height 6rem
+      background linear-gradient(to bottom, rgba(91, 213, 255, 0.8), rgba(91, 213, 255, 0.3))
 </style>

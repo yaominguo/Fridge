@@ -16,19 +16,9 @@
         <m-chart :options="options3" :data="data3"/>
       </m-card>
     </div>
-    <div class="box4">
-      <m-card mode="2" title="各品种鱼苗数量">
-        <FishChart />
-      </m-card>
-    </div>
-    <div class="box5">
-      <m-card mode="2" title="渔业种业经济产量">
-        <m-chart :options="options5" :data="data5"/>
-      </m-card>
-    </div>
-    <div class="box6">
-      <m-card mode="2" title="渔业种业经济产值">
-        <m-chart :options="options4" :data="data4"/>
+    <div v-for="(item, index) in fishChartData.value" :key="item.name" :class="`box${4 + index}`">
+      <m-card mode="2" :title="`特色品种鱼苗数量 - ${item.name}`">
+        <m-chart :options="getOptions(item)" :data="[item]" :showLegend="false"/>
       </m-card>
     </div>
   </div>
@@ -36,70 +26,62 @@
 
 <script>
 import ThemeTitle from './components/title'
-import FishChart from './components/fish-chart'
+import axios from 'axios'
 export default {
   name: 'GDIndustry',
   components: {
     ThemeTitle,
-    FishChart,
   },
   data() {
     return {
       options1: {
+        legend: {
+          top: '2%',
+        },
         xAxis: {
-          data: ['2015年', '2016年', '2017年', '2018年'],
+          data: [],
         },
         yAxis: {
           name: '(万元)',
-          interval: 200,
-          max: 1600,
         },
         series: {
           type: 'bar',
+          barWidth: '40%',
           stack: '总量',
         }
       },
-      data1: [
-        {name: '海水养殖', data: [200,200,200,200]},
-        {name: '淡水养殖', data: [500,550,580,600]},
-        {name: '海水捕捞', data: [160,160,160,160]},
-        {name: '淡水捕捞', data: [100,100,100,100]},
-        {name: '水产苗种', data: [200,200,200,200]},
-      ],
+      data1: [],
       options2: {
+        legend: {
+          top: '2%',
+        },
         xAxis: {
-          data: ['2015年', '2016年', '2017年', '2018年'],
+          data: [],
         },
         yAxis: {
           name: '(吨)',
-          interval: 200,
-          max: 1600,
         },
         series: {
           type: 'bar',
+          barWidth: '40%',
           stack: '总量',
         }
       },
-      data2: [
-        {name: '海水养殖', data: [200,200,200,200]},
-        {name: '淡水养殖', data: [500,550,580,600]},
-        {name: '海水捕捞', data: [160,160,160,160]},
-        {name: '淡水捕捞', data: [100,100,100,100]},
-        {name: '水产苗种', data: [200,200,200,200]},
-      ],
+      data2: [],
       options3: {
-        colors: ['#F47C1F', '#71C012', '#FFCE34'],
+        colors: ['#21640D', '#FFCE34', '#F47C1F'],
+        legend: {
+          top: '2%',
+        },
         grid: {
           right: '5%',
         },
         xAxis: {
-          data: ['2015年', '2016年', '2017年', '2018年'],
+          data: [],
           boundaryGap: false,
         },
         yAxis: {
           name: '(吨)',
-          interval: 100,
-          max: 400,
         },
         series: {
           type: 'line',
@@ -108,63 +90,52 @@ export default {
           symbol: 'circle',
         }
       },
-      data3: [
-        {name: '水产加工品总量', data: [130,140,150,145]},
-        {name: '淡水加工品总量', data: [110,120,100,110]},
-        {name: '海水加工品总量', data: [60,70,80,50]},
-      ],
-      options4: {
-        colors: ['#F47C1F', '#71C012', '#FFCE34'],
-        xAxis: {
-          data: ['2015年', '2016年', '2017年', '2018年'],
-        },
-        yAxis: {
-          name: '(万元)',
-          interval: 200,
-          max: 1600,
-        },
-        series: {
-          type: 'bar',
-          stack: '总量',
-          areaStyle: {},
-          symbol: 'circle',
-        }
-      },
-      data4: [
-        {name: '渔业产值', data: [200,200,200,200]},
-        {name: '渔业工业和建筑业', data: [500,550,580,600]},
-        {name: '渔业流通和服务业', data: [160,160,160,160]},
-      ],
-      options5: {
-        colors: ['#347122', '#C13636', '#F47C1F', '#940BC3', '#0076FF'],
-        grid: {
-          right: '5%',
-        },
-        xAxis: {
-          data: ['2015年', '2016年', '2017年', '2018年'],
-          boundaryGap: false,
-        },
-        yAxis: {
-          name: '(吨)',
-          interval: 100,
-          min: 200,
-          max: 900,
-        },
-        series: {
-          type: 'line',
-          stack: '总量',
-          symbol: 'circle',
-        }
-      },
-      data5: [
-        {name: '海水养殖', data: [250,300,350,300]},
-        {name: '海水捕捞', data: [130,140,150,145]},
-        {name: '淡水养殖', data: [110,120,100,110]},
-        {name: '淡水捕捞', data: [60,70,80,50]},
-        {name: '远洋渔业', data: [160,170,80,150]},
-      ],
+      data3: [],
+      fishChartData: {
+        name: [],
+        value: [],
+      }
     }
   },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      axios.get(this.$api.FILE_URL + 'gd-industry.json').then(res => {
+        const {output, production, processProduction, fishProduction} = res.data
+        this.options1.xAxis.data = output.name
+        this.data1 = output.value
+        this.options2.xAxis.data = production.name
+        this.data2 = production.value
+        this.options3.xAxis.data = processProduction.name
+        this.data3 = processProduction.value
+        this.fishChartData = fishProduction
+      })
+    },
+    getOptions(data) {
+      return {
+        xAxis: {
+          data: this.fishChartData.name,
+        },
+        yAxis: {
+          name: data.unit,
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+          itemStyle: {
+            shadowColor: '#0076FF',
+            shadowBlur: 6,
+            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {offset: 0, color: '#1FECFF'},
+              {offset: 1, color: '#0076FF'}
+            ])
+          },
+        }
+      }
+    },
+  }
 }
 </script>
 
@@ -174,8 +145,9 @@ export default {
   grid-template-areas \
     '. theme .'\
     'box1 box2 box3'\
-    'box4 box5 box6'
-  grid-template-rows 4rem 1fr 1fr
+    'box4 box5 box6'\
+    'box7 box8 box9'
+  grid-template-rows 4rem 1fr 1fr 1fr
   grid-template-columns 1fr 1fr 1fr
   .theme
     grid-area theme
@@ -193,4 +165,10 @@ export default {
     grid-area box5
   .box6
     grid-area box6
+  .box7
+    grid-area box7
+  .box8
+    grid-area box8
+  .box9
+    grid-area box9
 </style>
