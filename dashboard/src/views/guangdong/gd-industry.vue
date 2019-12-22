@@ -1,6 +1,6 @@
 <template>
   <div id="container" :style="`background-image: url(${require('@/assets/images/stars-bg.png')})`">
-    <ThemeTitle class="theme">广东省产业布局分析专题</ThemeTitle>
+    <ThemeTitle class="theme">广东省渔业产业布局分析专题</ThemeTitle>
     <div class="box1">
       <m-card mode="2" title="渔业经济产值">
         <m-chart :options="options1" :data="data1"/>
@@ -16,9 +16,19 @@
         <m-chart :options="options3" :data="data3"/>
       </m-card>
     </div>
-    <div v-for="(item, index) in fishChartData.value" :key="item.name" :class="`box${4 + index}`">
-      <m-card mode="2" :title="`特色品种鱼苗数量 - ${item.name}`">
-        <m-chart :options="getOptions(item)" :data="[item]" :showLegend="false"/>
+    <div class="box4">
+      <m-card mode="2" title="各市2018年渔业经济产值">
+        <m-chart :showLegend="false" :options="options4" :data="data4"/>
+      </m-card>
+    </div>
+    <div class="box5">
+      <m-card mode="2" title="各市2018年渔业经济产量">
+        <m-chart :showLegend="false" :options="options5" :data="data5"/>
+      </m-card>
+    </div>
+    <div class="box6">
+      <m-card mode="2" title="各市2018年渔业加工产量">
+        <m-chart :showLegend="false" :options="options6" :data="data6"/>
       </m-card>
     </div>
   </div>
@@ -36,7 +46,11 @@ export default {
     return {
       options1: {
         legend: {
-          top: '2%',
+          // top: '2%',
+          left: '24%',
+          top: '10%',
+          itemWidth: 10,
+          itemHeight: 10,
         },
         xAxis: {
           data: [],
@@ -53,7 +67,11 @@ export default {
       data1: [],
       options2: {
         legend: {
-          top: '2%',
+          // top: '2%',
+          left: '38%',
+          top: '10%',
+          itemWidth: 10,
+          itemHeight: 10,
         },
         xAxis: {
           data: [],
@@ -69,9 +87,13 @@ export default {
       },
       data2: [],
       options3: {
-        colors: ['#21640D', '#FFCE34', '#F47C1F'],
+        colors: ['#71C012', '#FFCE34', '#F47C1F'],
         legend: {
-          top: '2%',
+          // top: '2%',
+          left: '32%',
+          top: '10%',
+          itemWidth: 10,
+          itemHeight: 10,
         },
         grid: {
           right: '5%',
@@ -91,10 +113,78 @@ export default {
         }
       },
       data3: [],
-      fishChartData: {
-        name: [],
-        value: [],
-      }
+      options4: {
+        colors: [['#1FECFF', '#0076FF']],
+        grid: {
+          bottom: 0,
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            rotate: 45,
+            textStyle: {
+              color: '#ccc',
+            },
+            fontSize: this.fontSize,
+          },
+        },
+        yAxis: {
+          name: '(万元)',
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+        }
+      },
+      options5: {
+        colors: [['#1FECFF', '#0076FF']],
+        grid: {
+          bottom: 0,
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            rotate: 45,
+            textStyle: {
+              color: '#ccc',
+            },
+            fontSize: this.fontSize,
+          },
+        },
+        yAxis: {
+          name: '(吨)',
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+        }
+      },
+      options6: {
+        colors: [['#1FECFF', '#0076FF']],
+        grid: {
+          bottom: 0,
+        },
+        xAxis: {
+          data: [],
+          axisLabel: {
+            rotate: 45,
+            textStyle: {
+              color: '#ccc',
+            },
+            fontSize: this.fontSize,
+          },
+        },
+        yAxis: {
+          name: '(吨)',
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+        }
+      },
+      data4: [],
+      data5: [],
+      data6: [],
     }
   },
   mounted() {
@@ -103,37 +193,57 @@ export default {
   methods: {
     getData() {
       axios.get(this.$api.FILE_URL + 'gd-industry.json').then(res => {
-        const {output, production, processProduction, fishProduction} = res.data
+        const {output, production, processProduction, cityOutput, cityProduction, cityProcessProduction} = res.data
+        const textStyle = {
+          color: '#ccc',
+          fontSize: this.fontSize,
+        }
         this.options1.xAxis.data = output.name
+        this.options1.legend.textStyle = textStyle
         this.data1 = output.value
         this.options2.xAxis.data = production.name
+        this.options2.legend.textStyle = textStyle
         this.data2 = production.value
         this.options3.xAxis.data = processProduction.name
+        this.options3.legend.textStyle = textStyle
         this.data3 = processProduction.value
-        this.fishChartData = fishProduction
+        const data4 = [], data5 = [], data6 = []
+        cityOutput.forEach((item, index) => {
+          this.options4.xAxis.data.push(item.name)
+          data4.push(item.value)
+        })
+        cityProduction.forEach((item, index) => {
+          this.options5.xAxis.data.push(item.name)
+          data5.push(item.value)
+        })
+        cityProcessProduction.forEach((item, index) => {
+          this.options6.xAxis.data.push(item.name)
+          data6.push(item.value)
+        })
+        this.data4 = [{data: data4}]
+        this.data5 = [{data: data5}]
+        this.data6 = [{data: data6}]
       })
     },
     getOptions(data) {
       return {
+        colors: [['#1FECFF', '#0076FF']],
         xAxis: {
           data: this.fishChartData.name,
         },
         yAxis: {
-          name: data.unit,
+          name: `(${data.unit})`,
         },
         series: {
           type: 'bar',
           barWidth: '40%',
-          itemStyle: {
-            shadowColor: '#0076FF',
-            shadowBlur: 6,
-            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {offset: 0, color: '#1FECFF'},
-              {offset: 1, color: '#0076FF'}
-            ])
-          },
         }
       }
+    },
+  },
+  computed: {
+    fontSize() {
+      return Math.floor(screen.height * 1.48 / 100) / 1.2
     },
   }
 }
@@ -144,15 +254,15 @@ export default {
   $gd-layout()
   grid-template-areas \
     '. theme .'\
-    'box1 box2 box3'\
-    'box4 box5 box6'\
-    'box7 box8 box9'
+    'box1 box4 box4'\
+    'box2 box5 box5'\
+    'box3 box6 box6'
   grid-template-rows 4rem 1fr 1fr 1fr
   grid-template-columns 1fr 1fr 1fr
   .theme
     grid-area theme
-    width 120%
-    margin-left -10%
+    width 150%
+    margin-left -25%
   .box1
     grid-area box1
   .box2
@@ -165,10 +275,4 @@ export default {
     grid-area box5
   .box6
     grid-area box6
-  .box7
-    grid-area box7
-  .box8
-    grid-area box8
-  .box9
-    grid-area box9
 </style>

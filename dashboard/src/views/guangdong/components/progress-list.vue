@@ -2,9 +2,9 @@
   <ul class="list">
     <li class="row" v-for="(item, i) in list" :key="item.name + i">
       <span class="name">{{item.name}}</span>
-      <Progress class='progress' style="width: 40%" :percent="calcPercent(item.value)" :stroke-width="12" :hide-info="true" status="active" :stroke-color="['#0176fe', '#4aecfd']" />
+      <!-- <Progress class='progress' style="width: 40%" :percent="calcPercent(item.value)" :stroke-width="12" :hide-info="true" status="active" :stroke-color="['#0176fe', '#4aecfd']" /> -->
       <div>
-        <b><m-count :value="item.value"/></b>
+        <b :style="`color:${color}`"><m-count :value="item.value"/></b>
         <span class="unit">{{item.unit}}</span>
       </div>
     </li>
@@ -20,15 +20,19 @@ export default {
       default() {
         return []
       }
+    },
+    color: {
+      type: String,
+      default: '#71C012',
     }
   },
-  methods: {
-    calcPercent(val) {
-      if (!val || val < 0) return 0
-      const percent = Math.round((val / 50) * 100)
-      return percent >= 100 ? 100 : percent
-    }
-  }
+  // methods: {
+  //   calcPercent(val) {
+  //     if (!val || val < 0) return 0
+  //     const percent = Math.round((val / 50) * 100)
+  //     return percent >= 100 ? 100 : percent
+  //   }
+  // }
 }
 </script>
 
@@ -44,11 +48,11 @@ export default {
     align-items center
     justify-content space-between
     border-bottom 0.1rem solid rgba(28, 66, 95, 0.4)
-    .name
-      width 21%
+    // .name
+    //   width 21%
     b
-      font-size 1.1rem
-      color #71C012
+      font-size 1.2rem
+      color $color-green
     .unit
       font-size 0.5rem
       margin-left 0.2rem

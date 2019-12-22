@@ -1,10 +1,10 @@
 <template>
 <div class="map-wrapper">
-  <div id="map" />
+  <div ref="map" id="map"/>
   <div v-if="data.length > 0" class="visualmap">
-    <p>高</p>
+    <p>{{visualLabel[0]}}</p>
     <div class="bar" />
-    <p>低</p>
+    <p>{{visualLabel[1]}}</p>
   </div>
 </div>
 </template>
@@ -19,7 +19,23 @@ export default {
       default() {
         return []
       }
-    }
+    },
+    visualLabel: {
+      type: Array,
+      default() {
+        return ['高', '低']
+      }
+    },
+    visualFormatter: {
+      type: String,
+      default: '{b}<br/>病害发生面积：{c}亩'
+    },
+    visualConfig: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
   },
   data() {
     return {
@@ -92,7 +108,7 @@ export default {
         this.locations.push({name: el.properties.name, value: el.properties.cp})
       })
       this.$echarts.registerMap(this.mapName, guangdong)
-      this.map = this.$echarts.init(document.getElementById('map'))
+      this.map = this.$echarts.init(this.$refs.map)
       this.config = {
         geo: {
           map: this.mapName,
@@ -105,7 +121,6 @@ export default {
             },
             emphasis: {
               show: false,
-              color: '#fff',
             }
           },
           itemStyle: {
@@ -191,7 +206,12 @@ export default {
           geoIndex: 0,
           data: this.data,
         })
-        this.config.visualMap = {
+        this.config.tooltip = {
+          trigger: 'item',
+          extraCssText: 'transform: rotate(-28deg);',
+          formatter: this.visualFormatter,
+        }
+        this.config.visualMap = Object.assign({
           show: false,
           // min: 0,
           // max: 60000,
@@ -202,9 +222,9 @@ export default {
           // realtime: false,
           // calculable: true,
           inRange: {
-            color: ['rgba(91, 213, 255, 0.3)', 'rgba(91, 213, 255, 0.8)']
+            color: ['rgba(91, 213, 255, 0.1)', 'rgba(91, 213, 255, 0.6)']
           }
-        }
+        }, this.visualConfig)
         this.map.setOption(this.config)
       }
     }
@@ -230,5 +250,5 @@ export default {
     .bar
       width 2rem
       height 6rem
-      background linear-gradient(to bottom, rgba(91, 213, 255, 0.8), rgba(91, 213, 255, 0.3))
+      background linear-gradient(to bottom, rgba(91, 213, 255, 0.6), rgba(91, 213, 255, 0.1))
 </style>

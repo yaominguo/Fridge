@@ -1,5 +1,5 @@
 <template>
-  <div id="title" ref="title">
+  <div id="title" ref="title" @dblclick="handleClick">
     <img :src="bgImg"/>
     <p><slot /></p>
   </div>
@@ -21,6 +21,11 @@ export default {
       this.bgImg = titleBg2
     }
   },
+  methods: {
+    handleClick() {
+      this.$router.push({name: 'home'})
+    }
+  },
 }
 </script>
 
@@ -33,6 +38,7 @@ export default {
   min-width 60%
   margin 0 auto
   height 4.2rem
+  cursor pointer
   >img
     position absolute
     width 100%
@@ -42,7 +48,9 @@ export default {
   >p
     font-family $font-pang
     font-size 2.5rem
+    background-clip text
     -webkit-background-clip text
+    color #1efbff
     -webkit-text-fill-color transparent
     background-image linear-gradient(to right, #1efbff, #0094ff)
 </style>

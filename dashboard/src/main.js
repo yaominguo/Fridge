@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import echarts from 'echarts'
 import {Button, Divider, Progress, Select, Option} from 'view-design'
+import animate from 'animate.css'
 import ajax from '@/server/ajax'
 import api from '@/server/api'
 import MonitorCard from '@/components/MonitorCard'
@@ -20,6 +21,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.prototype.$ajax = ajax
 Vue.prototype.$api = api
+Vue.use(animate)
 Vue.use(MonitorCard)
 Vue.use(MonitorCount)
 Vue.use(MonitorFlip)

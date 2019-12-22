@@ -60,20 +60,23 @@ export default {
       }
       options.xAxis = Object.assign(this.defaultOptions.xAxis, this.options.xAxis)
       options.yAxis = Object.assign(this.defaultOptions.yAxis, this.options.yAxis)
-      console.log(this.data)
-
       options.series = this.data.map((item, index) => {
         let color = colors[index]
-        if (Array.isArray(color)) {
+        let shadow = {}
+        if (Array.isArray(color)) { // 如果颜色是数组则渐变
           color = new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: color[0]},
             {offset: 1, color: color[1]}
           ])
+          shadow = {
+            shadowColor: '#0076FF',
+            shadowBlur: 6,
+          }
         }
         const result = {
           name: item.name,
           barWidth: '50%',
-          itemStyle: { color },
+          itemStyle: { color, ...shadow },
           data: item.data || []
         }
         if (this.options.series) {
@@ -165,8 +168,6 @@ export default {
   },
   watch: {
     data(cur, past) {
-      console.log('sss', cur, past)
-
       if (cur && cur !== past && cur.length > 0) {
         this.init()
       }

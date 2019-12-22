@@ -45,8 +45,10 @@ export default {
     color $color-map(1)
   p
     width 28%
-    &:nth-child(2)
-      width 16%
+    text-align right
+    &:first-child
+      width 20%
+      text-align center
   b
     color #FFCE34
 </style>

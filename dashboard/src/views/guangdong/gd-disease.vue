@@ -1,29 +1,29 @@
 <template>
   <div id="container" :style="`background-image: url(${require('@/assets/images/stars-bg.png')})`">
     <GuangdongMap :data="cityDiseaseArea"/>
-    <ThemeTitle style="width: 300%;">全省疫病灾害数据分析专题</ThemeTitle>
+    <ThemeTitle style="width: 400%;">广东省水生动物病害数据分析专题</ThemeTitle>
     <div class="sum">
-      <p>全省水产疫病爆发<b><m-count :value="sum.total" :decimal="0"/></b>次</p>
-      <p>面积<b><m-count :value="sum.area"/></b>k㎡</p>
+      <p>2019年全省水产病害爆发<b><m-count :value="sum.total" :decimal="0"/></b>次</p>
+      <p>面积<b><m-count :value="sum.area"/></b>亩</p>
       <p>损失<b><m-count :value="sum.loss"/></b>万元</p>
     </div>
     <div class="box1">
-      <m-card mode="2" title="各疫病的发病次数">
-        <DataList :list="disease" :decimal="0"/>
-      </m-card>
-    </div>
-    <div class="box2">
-      <m-card mode="2" title="各市疫病情况">
+      <m-card mode="2" title="2019年各市病害情况">
         <DiseaseList :list="citySituation"/>
       </m-card>
     </div>
+    <div class="box2">
+      <m-card mode="2" title="2019年各病害的发病次数(次)">
+        <DataList :list="disease" :decimal="0"/>
+      </m-card>
+    </div>
     <div class="box3">
-      <m-card mode="2" title="疫情情况趋势">
+      <m-card mode="2" title="2019年病害情况趋势">
         <m-chart :showLegend="false" :options="options" :data="data"/>
       </m-card>
     </div>
     <div class="box4">
-      <m-card mode="2" title="各类发病次数占比">
+      <m-card mode="2" title="2019年各类病害次数占比">
         <m-chart :options="options2" :data="data2"/>
       </m-card>
     </div>
@@ -59,15 +59,15 @@ export default {
           type: 'line',
           areaStyle: {},
         },
-        colors: ['rgba(0, 118, 255, 1)'],
+        colors: [['rgb(255, 158, 68)', 'rgb(255, 70, 131)']],
       },
       data: [],
       options2: {
         legend: {
           orient: 'vertical',
           y: 'center',
-          left: '60%',
-          top: '10%',
+          left: '65%',
+          top: '25%',
           data: [],
           formatter: name => {
             const item = this.data2.find(el => el.name === name)
@@ -77,13 +77,14 @@ export default {
         tooltip: {
           trigger: 'item',
         },
-        color: ['#3391FF','#71C012','#F47C1F','#CC4D4D','#C15CFF','#8400FF'],
+        color: ['#1fecff', '#3391FF', '#71C012', 'gold', '#F47C1F', '#C15CFF'],
         series: {
           type: 'pie',
+          radius: ['45%', '70%'],
           label: {
             show: false,
           },
-          center: ['30%', '50%'],
+          center: ['35%', '50%'],
           data: [],
         }
       },
@@ -129,11 +130,11 @@ export default {
 #container
   $gd-layout()
   grid-template-areas \
-    'box1 . . . box2'\
-    'box1 . . . box2'\
-    'box3 box3 box4 box4 box2'
+    'box1 . . . . box2'\
+    'box1 . . . . box2'\
+    'box3 box3 box3 box4 box4 box2'
   grid-template-rows 1fr 1fr 1fr
-  grid-template-columns 1.2fr 1fr 1fr 1fr 1.2fr
+  grid-template-columns 1.5fr 1fr 1fr 1fr 1fr 1.5fr
   .sum
     display flex
     justify-content space-around

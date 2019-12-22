@@ -1,0 +1,72 @@
+{
+  "area": 478897,
+  "cityData": [
+    {"name": "广州市", "area": 23010, "output": 454214},
+    {"name": "韶关市", "area": 15968, "output": 81037},
+    {"name": "深圳市", "area": 1126, "output": 78453},
+    {"name": "珠海市", "area": 25697, "output": 313635},
+    {"name": "汕头市", "area": 15330, "output": 465237},
+    {"name": "佛山市", "area": 34888, "output": 675086},
+    {"name": "江门市", "area": 55194, "output": 765695},
+    {"name": "湛江市", "area": 81382, "output": 1234025},
+    {"name": "茂名市", "area": 37383, "output": 900108},
+    {"name": "肇庆市", "area": 33945, "output": 462347},
+    {"name": "惠州市", "area": 17670, "output": 158055},
+    {"name": "梅州市", "area": 10697, "output": 107078},
+    {"name": "汕尾市", "area": 18408, "output": 567008},
+    {"name": "河源市", "area": 5664, "output": 42612},
+    {"name": "阳江市", "area": 31472, "output": 1182625},
+    {"name": "清远市", "area": 16861, "output": 131113},
+    {"name": "东莞市", "area": 5596, "output": 45991},
+    {"name": "中山市", "area": 20596, "output": 329656},
+    {"name": "潮州市", "area": 13030, "output": 196665},
+    {"name": "揭阳市", "area": 8219, "output": 144416},
+    {"name": "云浮市", "area": 6762, "output": 99915}
+  ],
+  "production": [
+    {"name": "海水养殖产量", "unit": "", "value":	3167259},
+    {"name": "鱼类", "unit": "", "value":	594793},
+    {"name": "甲壳类", "unit": "", "value":	582121},
+    {"name": "贝类", "unit": "", "value":	1898078},
+    {"name": "藻类", "unit": "", "value":	73191},
+    {"name": "其他", "unit": "", "value":	19076},
+    {"name": "淡水养殖产量", "unit": "", "value":	3837113},
+    {"name": "鱼类", "unit": "", "value":	3497894},
+    {"name": "甲壳类", "unit": "", "value":	258386},
+    {"name": "贝类", "unit": "", "value":	12870},
+    {"name": "其他类", "unit": "", "value":	48306},
+    {"name": "观赏鱼", "unit": "", "value":	19657}
+  ],
+  "specialProduction": [
+    {"name": "南美白对虾", "unit": "吨", "value": 611025},
+    {"name": "鳖", "unit": "吨", "value": 18434},
+    {"name": "龟", "unit": "吨", "value": 7288},
+    {"name": "鳗鲡", "unit": "吨", "value": 106423},
+    {"name": "罗非鱼", "unit": "吨", "value": 751239},
+    {"name": "牡蛎", "unit": "吨", "value": 1141457},
+    {"name": "鲈鱼", "unit": "吨", "value": 345035},
+    {"name": "乌鳢", "unit": "吨", "value": 165236},
+    {"name": "螺", "unit": "吨", "value": 86760},
+    {"name": "草鱼", "unit": "吨", "value": 892370},
+    {"name": "鳜鱼", "unit": "吨", "value": 92363},
+    {"name": "黄颡鱼", "unit": "吨", "value": 54065}
+  ],
+  "totalArea": [
+    {"name": "2015年", "unit": "公顷", "value": 569042 },
+    {"name": "2016年", "unit": "公顷", "value": 558617 },
+    {"name": "2017年", "unit": "公顷", "value": 477064 },
+    {"name": "2018年", "unit": "公顷", "value": 482540 }
+  ],
+  "seaArea": [
+    {"name": "2015年", "unit": "公顷", "value": 194861 },
+    {"name": "2016年", "unit": "公顷", "value": 196065 },
+    {"name": "2017年", "unit": "公顷", "value": 161690 },
+    {"name": "2018年", "unit": "公顷", "value": 165614 }
+  ],
+  "waterArea": [
+    {"name": "2015年", "unit": "公顷", "value": 374181 },
+    {"name": "2016年", "unit": "公顷", "value": 362552 },
+    {"name": "2017年", "unit": "公顷", "value": 315374 },
+    {"name": "2018年", "unit": "公顷", "value": 316926 }
+  ]
+}

@@ -1,25 +1,40 @@
 <template>
   <div id="container" :style="`background-image: url(${require('@/assets/images/stars-bg.png')})`">
-    <GuangdongMap />
-    <ThemeTitle>广东省生产专题</ThemeTitle>
+    <GuangdongMap key="production" :data="mapData" :visualConfig="visualConfig" visualFormatter="{b}<br/>养殖面积：{c}公顷"/>
+    <ThemeTitle style="width: 150%;margin-left:20%;">广东省渔业生产专题</ThemeTitle>
     <div class="area">
       <p>当前广东省养殖面积</p>
-      <b><m-flip :value="828688678"/></b>
-      <span>k㎡</span>
+      <b v-if="area"><m-flip :value="area"/></b>
+      <span>公顷</span>
     </div>
     <div class="box1">
-      <m-card mode="2" title="各品种企业排行榜">
-        <DataList :list="list1"/>
+      <m-card mode="2" title="各种类养殖产量(吨)">
+        <DataList :list="production" :decimal="0"/>
       </m-card>
     </div>
     <div class="box2">
-      <m-card mode="2" title="各市养殖面积">
-        <DataList :list="list2"/>
+      <m-card mode="2" title="各市养殖面积(亩)">
+        <ProductionList :list="cityData"/>
       </m-card>
     </div>
-    <div class="box3">
-      <m-card mode="2" title="各品种养殖/出塘数据">
+    <!-- <div class="box3">
+      <m-card mode="2" title="特色品种养殖产量">
         <m-chart :showLegend="false" :options="options" :data="data" />
+      </m-card>
+    </div> -->
+    <div class="box4">
+      <m-card mode="2" title="养殖总面积对比">
+        <m-chart :showLegend="false" :options="options1" :data="data1"/>
+      </m-card>
+    </div>
+    <div class="box5">
+      <m-card mode="2" title="海水养殖面积对比">
+        <m-chart :showLegend="false" :options="options2" :data="data2"/>
+      </m-card>
+    </div>
+    <div class="box6">
+      <m-card mode="2" title="淡水养殖面积对比">
+        <m-chart :showLegend="false" :options="options3" :data="data3"/>
       </m-card>
     </div>
   </div>
@@ -27,79 +42,114 @@
 
 <script>
 import DataList from './components/list'
+import ProductionList from './components/production-list'
 import ThemeTitle from './components/title'
 import GuangdongMap from './components/map'
+import axios from 'axios'
 export default {
   name: 'GDProduction',
   components: {
     DataList,
+    ProductionList,
     ThemeTitle,
     GuangdongMap,
   },
   data() {
     return {
-      list1: [
-        {name: '淡水鱼苗', value: 8279, unit: '亿尾'},
-        {name: '淡水鱼种', value: 222544, unit: '吨'},
-        {name: '投放鱼种', value: 193027, unit: '吨'},
-        {name: '稚鳖', value: 6549, unit: '万只'},
-        {name: '稚龟', value: 655, unit: '万只'},
-        {name: '鳗苗捕捞', value: 43, unit: '千克'},
-        {name: '海水鱼苗', value: 508510, unit: '万尾'},
-        {name: '虾类育苗', value: 5455, unit: '万尾'},
-        {name: '贝类育苗', value: 293678, unit: '万尾'},
-        {name: '海带', value: 100, unit: '亿株'},
-        {name: '紫菜', value: 0.06, unit: '亿株'},
-        {name: '海参', value: 0.09, unit: '亿头'},
-      ],
-      list2: [
-        {name: '广州市', value: 7434.40, unit: 'k㎡'},
-        {name: '韶关市', value: 18218.06, unit: 'k㎡'},
-        {name: '深圳市', value: 1996.85, unit: 'k㎡'},
-        {name: '珠海市', value: 1711.24, unit: 'k㎡'},
-        {name: '汕头市', value: 2198.70, unit: 'k㎡'},
-        {name: '佛山市', value: 3875, unit: 'k㎡'},
-        {name: '江门市', value: 9505, unit: 'k㎡'},
-        {name: '湛江市', value: 13225.44, unit: 'k㎡'},
-        {name: '茂名市', value: 11458, unit: 'k㎡'},
-        {name: '肇庆市', value: 7434.40, unit: 'k㎡'},
-        {name: '惠州市', value: 11599, unit: 'k㎡'},
-        {name: '梅州市', value: 15864.5, unit: 'k㎡'},
-        {name: '汕尾市', value: 5271, unit: 'k㎡'},
-        {name: '河源市', value: 15642, unit: 'k㎡'},
-        {name: '阳江市', value: 7955.9, unit: 'k㎡'},
-        {name: '清远市', value: 19000, unit: 'k㎡'},
-        {name: '东莞市', value: 2460.10, unit: 'k㎡'},
-        {name: '中山市', value: 1783.67, unit: 'k㎡'},
-        {name: '潮州市', value: 3679, unit: 'k㎡'},
-        {name: '揭阳市', value: 5240.5, unit: 'k㎡'},
-        {name: '云浮市', value: 7785.11, unit: 'k㎡'},
-      ],
-      options: {
+      area: 0,
+      production: [],
+      specialProduction: [],
+      cityData: [],
+      options1: {
+        colors: [['#1FECFF', '#0076FF']],
         xAxis: {
-          data: ['淡水育苗', '淡水鱼种', '投放鱼种', '稚鳖', '稚龟', '鳗苗捕捞', '海水鱼苗', '虾类育苗', '贝类育苗', '海带', '紫菜', '海参'],
+          data: [],
         },
         yAxis: {
-          name: '(吨)',
-          interval: 2000,
+          name: '(公顷)',
+          min: 450000,
+          max: 600000,
         },
         series: {
           type: 'bar',
-          itemStyle: {
-            shadowColor: '#0076FF',
-            shadowBlur: 6,
-            color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {offset: 0, color: '#1FECFF'},
-              {offset: 1, color: '#B645FF'}
-            ])
-          },
+          barWidth: '40%',
         }
       },
-      data: [
-        {data: [6500, 8500, 6000, 4600, 5600, 8500, 6000, 2500, 4500, 6500, 4500, 8000]},
-      ],
+      options2: {
+        colors: [['#1FECFF', '#0076FF']],
+        xAxis: {
+          data: [],
+        },
+        yAxis: {
+          name: '(公顷)',
+          min: 150000,
+          max: 200000,
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+        }
+      },
+      options3: {
+        colors: [['#1FECFF', '#0076FF']],
+        xAxis: {
+          data: [],
+        },
+        yAxis: {
+          name: '(公顷)',
+          min: 300000,
+          max: 400000,
+        },
+        series: {
+          type: 'bar',
+          barWidth: '40%',
+        }
+      },
+      data1: [],
+      data2: [],
+      data3: [],
+      visualConfig: {
+        pieces: [
+          {min:0, max: 10000},
+          {min:10001, max: 20000},
+          {min:20001, max: 30000},
+          {min:30001, max: 40000},
+          {min:40001},
+        ]
+      },
+      mapData: [],
     }
   },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      axios.get(this.$api.FILE_URL + 'gd-production.json').then(res => {
+        for(let key in res.data) {
+          this[key] = res.data[key]
+        }
+        const data1 = [], data2 = [], data3 = []
+        this.totalArea.forEach((item, index) => {
+          this.options1.xAxis.data.push(item.name)
+          this.options2.xAxis.data.push(item.name)
+          this.options3.xAxis.data.push(item.name)
+          data1.push(item.value)
+          data2.push(this.seaArea[index].value)
+          data3.push(this.waterArea[index].value)
+        })
+        this.data1 = [{data: data1}]
+        this.data2 = [{data: data2}]
+        this.data3 = [{data: data3}]
+        this.mapData = this.cityData.map(item => {
+          return {
+            name: item.name,
+            value: item.area,
+          }
+        })
+      })
+    }
+  }
 }
 </script>
 
@@ -107,17 +157,24 @@ export default {
 #container
   $gd-layout()
   grid-template-areas \
-    'box1 . box2'\
-    'box1 . box2'\
-    'box3 box3 box2'
+    'box1 . . box2'\
+    'box1 . . box2'\
+    'box4 box5 box6 box2'
   grid-template-rows 1fr 1fr 1fr
-  grid-template-columns 1fr 3fr 1fr
+  grid-template-columns 1fr 1fr 1fr 1fr
   .box1
     grid-area box1
+    width 80%
   .box2
     grid-area box2
-  .box3
-    grid-area box3
+  // .box3
+  //   grid-area box3
+  .box4
+    grid-area box4
+  .box5
+    grid-area box5
+  .box6
+    grid-area box6
   .area
     font-size 1.8rem
     color $color-map(1)
@@ -132,5 +189,5 @@ export default {
     b
       font-size 3rem
     >span
-      font-size 1.5rem
+      font-family $font-pang
 </style>

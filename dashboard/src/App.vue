@@ -1,12 +1,67 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition name="custom-classes-transition" enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+      <router-view :key="$route.fullPath"/>
+    </transition>
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
+  data() {
+    return {
+      routes: ['home', 'industry', 'special', 'production', 'trade', 'fish', 'disease', 'enterprise', 'flow'],
+      cur: 0,
+      timer: null,
+      timeOuter: null,
+      seconds: 1000 * 10
+    }
+  },
+  mounted() {
+    this.$router.push({
+      name: this.routes[this.cur]
+    })
+    this.setTimer()
+    document.body.addEventListener('mousemove', this.removeTimer)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
+  methods: {
+    setTimer() {
+      this.timer = setInterval(() => {
+        this.cur += 1
+        if (this.cur >= this.routes.length) {
+          this.cur = 0
+        }
+        this.$router.push({
+          name: this.routes[this.cur]
+        })
+      }, this.seconds)
+    },
+    removeTimer() {
+      clearTimeout(this.timeOuter)
+      clearInterval(this.timer)
+      this.timer = null
+      this.timeOuter = setTimeout(this.setTimer, this.seconds / 10)
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name && this.cur != this.routes.indexOf(to.name)) {
+        this.cur = this.routes.indexOf(to.name)
+      }
+      // if (to.name === 'home') {
+      //   clearInterval(this.timer)
+      //   clearTimeout(this.timeOuter)
+      //   this.timer = null
+      //   this.cur = 0
+      // } else {
+      //   this.cur = this.routes.indexOf(to.name)
+      // }
+    }
+  }
 }
 </script>
 
@@ -24,7 +79,7 @@ export default {
   font-family Pangmenzhengdao
   src url(./assets/font/pangmenzhengdao.ttf)
 html, body
-  background #000
+  background-color #000 !important
   width 100%
   height 100%
   user-select none
