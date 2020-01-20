@@ -1,6 +1,6 @@
 <template>
   <div class="blogpost">
-    <h2>{{ post.title }}</h2>
+    <h2 @click="handleClick">{{ post.title }}</h2>
     <p>{{ post.body }}</p>
     <p class="meta">Written by {{post.author}} on {{date}}</p>
   </div>
@@ -22,6 +22,12 @@ export default class Blog extends Vue {
   get date() {
     const { datePosted } = this.post;
     return `${datePosted.getDate()}/${datePosted.getMonth()}/${datePosted.getFullYear()}`;
+  }
+
+  private handleClick():void {
+    this.$router.push({
+      name: 'about',
+    });
   }
 }
 </script>
