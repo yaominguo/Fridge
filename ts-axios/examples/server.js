@@ -31,6 +31,12 @@ router.get('/simple/get', (req, res) => {
     msg: 'hello world!'
   })
 })
+router.get('/base/get', (req, res) => {
+  res.json(req.query)
+})
+router.post('/base/post', (req, res) => {
+  res.json(req.body)
+})
 
 app.use(router)
 
