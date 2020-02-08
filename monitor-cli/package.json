@@ -1,0 +1,17 @@
+{
+  "name": "monitor-cli",
+  "version": "1.0.0",
+  "description": "大屏项目脚手架工具",
+  "bin": {
+    "monitor": "bin/monitor-cli"
+  },
+  "author": "Guo Mingyao",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "commander": "^4.1.1",
+    "download-git-repo": "^3.0.2",
+    "inquirer": "^7.0.4",
+    "ora": "^4.0.3"
+  }
+}
