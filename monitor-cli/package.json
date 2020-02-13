@@ -1,9 +1,9 @@
 {
   "name": "monitor-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "大屏项目脚手架工具",
   "bin": {
-    "monitor": "bin/monitor-cli"
+    "monitor-cli": "bin/monitor-cli"
   },
   "author": "Guo Mingyao",
   "license": "MIT",
