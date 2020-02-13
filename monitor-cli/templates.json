@@ -1,14 +1,6 @@
 {
-  "init": {
-    "place": "Hzy0913/react-template",
+  "大屏项目": {
+    "place": "yaominguo/monitor-template",
     "branch": ""
-  },
-  "complete-project": {
-    "place": "Hzy0913/react-template",
-    "branch": "#complete"
-  },
-  "simple-project": {
-    "place": "Hzy0913/react-template",
-    "branch": "#simple"
   }
 }

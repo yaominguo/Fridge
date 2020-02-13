@@ -4,7 +4,7 @@
  * 入口文件，执行‘init’命令后执行commands文件夹下的init.js
  */
 
-process.env.NODE_PATH = __dirname + '/../node_modules/'
+// process.env.NODE_PATH = __dirname + '/../node_modules/'
 const {resolve} = require('path')
 const res = command => resolve(__dirname, '../commands/', command)
 const program = require('commander')
