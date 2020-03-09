@@ -1,0 +1,17 @@
+{
+  "name": "vue-relation-graph",
+  "version": "1.0.0",
+  "description": "A Vue component to draw a relation graph with d3.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "relation"
+  ],
+  "author": "Guo Mingyao",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^5.15.0"
+  }
+}
