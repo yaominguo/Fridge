@@ -24,6 +24,7 @@ export default {
     }
   },
   mounted() {
+    if (!this.data.nodes || !this.data.links) return
     this.$nextTick(this.init)
   },
   methods: {
