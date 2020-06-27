@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  body {
+    background: #111;
+  }
+  .wrapper {
+    width: 100px;
+    margin: 50px auto;
+    position: relative;
+  }
+  .wrapper > input {
+    /* width: 100px; */
+    width: 100%;
+    color: #fff;
+    padding: 10px 15px;
+    border: 1px solid transparent;
+    background-color: blueviolet;
+    transition: background-color .3s ease-in-out;
+  }
+  .wrapper > input:focus {
+    outline: none;
+  }
+  .wrapper > input::placeholder {
+    color: gray;
+  }
+  .wrapper > span {
+    position: absolute;
+    background-color: #fc2f70;
+    transition: transform .1s ease;
+  }
+  .bottom,
+  .top {
+    height: 1px;
+    left: 0;
+    right: 0;
+    transform: scaleX(0);
+  }
+  .left,
+  .right {
+    width: 1px;
+    top: 0;
+    bottom: 0;
+    transform: scaleX(0);
+  }
+  .bottom {
+    bottom: 0;
+    transform-origin: bottom right;
+  }
+  input:focus ~ .bottom {
+    transform-origin: bottom left;
+    transform: scaleX(1);
+  }
+  .right {
+    right: 0;
+    transform-origin: top right;
+    transition-delay: .05s;
+  }
+  input:focus ~ .right {
+    transform-origin: bottom right;
+    transform: scaleY(1);
+  }
+  .top {
+    top: 0;
+    transform-origin: top left;
+    transform: scaleX(1);
+  }
+  input:focus ~ .top {
+    transform-origin: top right;
+    transform: scaleX(1);
+  }
+  .left {
+    left: 0;
+    transform-origin: bottom left;
+    transition-delay: .25s;
+  }
+  input:focus ~ .left {
+    transform-origin: top left;
+    transform: scaleX(1);
+  }
+</style>
+<body>
+  <div class="wrapper">
+    <input type="text" placeholder="Input Something">
+    <span class="bottom"></span>
+    <span class="right"></span>
+    <span class="top"></span>
+    <span class="left"></span>
+  </div>
+</body>
+</html>
