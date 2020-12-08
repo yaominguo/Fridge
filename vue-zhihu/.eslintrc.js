@@ -28,8 +28,8 @@ module.exports = {
     "prefer-destructuring": 1, // 优先使用数组和对象解构
     "no-param-reassign": 1, // 禁止在函数中对函数参数重新赋值
     "no-extra-semi": 1, // 禁用不必要的分号
-    "no-unused-vars": 1, // 禁止已声明但未使用的变量
-    "indent": [1, 2], // 使用2个空格缩进
+    // "no-unused-vars": 1, // 禁止已声明但未使用的变量
+    // "indent": [1, 2], // 使用2个空格缩进
     "no-multiple-empty-lines": [1, {max: 1}], // 禁止连续出现2个及以上空行
     "default-case": 1, // 要求switch语句必须有default分支
     "key-spacing": [1, {"beforeColon": false, "afterColon": true}], // 冒号前不要空格，后需要空格
