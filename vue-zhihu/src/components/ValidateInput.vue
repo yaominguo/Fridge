@@ -1,6 +1,16 @@
 <template>
   <div class="validate-input-container pb-3">
     <input
+      v-if="tag === 'input'"
+      :value="inputRef.val"
+      @blur="validateInput"
+      @input="updateValue"
+      class="form-control"
+      :class="{ 'is-invalid': inputRef.error }"
+      v-bind="$attrs"
+    />
+    <textarea
+      v-else
       :value="inputRef.val"
       @blur="validateInput"
       @input="updateValue"
@@ -21,14 +31,19 @@ interface RuleProp {
   type: 'required' | 'email'
   message: string
 }
-export type RulesProp = RuleProp[]
 const emailReg = /[\w-.]+@[\w-]+(.[\w_-]+)+/
+export type RulesProp = RuleProp[]
+export type TagType = 'input' | 'textarea'
 export default defineComponent({
   name: 'ValidateInput',
   inheritAttrs: false,
   props: {
     rules: Array as PropType<RulesProp>,
-    modelValue: String
+    modelValue: String,
+    tag: {
+      type: String as PropType<TagType>,
+      default: 'input'
+    }
   },
   setup(props, context) {
     const inputRef = reactive({

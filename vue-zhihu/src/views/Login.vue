@@ -11,7 +11,7 @@
         />
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword" class="form-label">密码</label>
+        <label class="form-label">密码</label>
         <ValidateInput
           v-model="pwdVal"
           :rules="pwdRules"
