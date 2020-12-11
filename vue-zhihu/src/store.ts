@@ -1,11 +1,21 @@
 import { createStore } from 'vuex'
-import { testData, testPosts, ColumnProps } from './testData'
-
+import axios from 'axios'
 interface UserProps {
   isLogin: boolean
   name?: string
   id?: number
   columnId?: number
+}
+interface ImageProps {
+  _id?: string
+  url?: string
+  createAt?: string
+}
+export interface ColumnProps {
+  _id?: string
+  title: string
+  avatar?: ImageProps
+  description: string
 }
 export interface PostProps {
   id: number
@@ -20,11 +30,12 @@ export interface GlobalDataProps {
   posts: PostProps[]
   user: UserProps
 }
+
 const store = createStore<GlobalDataProps>({
   state: {
-    columns: testData,
-    posts: testPosts,
-    user: { isLogin: false }
+    columns: [],
+    posts: [],
+    user: { isLogin: true, name: 'Guo', columnId: 1 }
   },
   mutations: {
     login(state) {
@@ -32,11 +43,21 @@ const store = createStore<GlobalDataProps>({
     },
     createPost(state, post) {
       state.posts.push(post)
+    },
+    fetchColumns(state, data) {
+      state.columns = data.data.list
+    }
+  },
+  actions: {
+    fetchColumns({ commit }) {
+      axios.get('/mock/api/columns').then(res => {
+        commit('fetchColumns', res.data)
+      })
     }
   },
   getters: {
-    getColumnById: state => (id: number) =>
-      state.columns.find(column => column.id === id),
+    getColumnById: state => (id: string) =>
+      state.columns.find(column => column._id === id),
     getPostsById: state => (cid: number) =>
       state.posts.filter(post => post.columnId === cid)
   }
