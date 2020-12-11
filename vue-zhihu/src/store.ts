@@ -1,4 +1,4 @@
-import { createStore } from 'vuex'
+import { createStore, Commit } from 'vuex'
 import axios from 'axios'
 interface UserProps {
   isLogin: boolean
@@ -18,17 +18,27 @@ export interface ColumnProps {
   description: string
 }
 export interface PostProps {
-  id: number
+  _id: string
   title: string
-  content: string
-  image?: string
+  excerpt?: string
+  content?: string
+  image?: ImageProps
   createdAt: string
-  columnId: number
+  column: string
 }
 export interface GlobalDataProps {
   columns: ColumnProps[]
   posts: PostProps[]
   user: UserProps
+}
+
+const fetchAndCommit = async (
+  url: string,
+  mutationName: string,
+  commit: Commit
+) => {
+  const { data } = await axios.get(url)
+  commit(mutationName, data)
 }
 
 const store = createStore<GlobalDataProps>({
@@ -46,20 +56,30 @@ const store = createStore<GlobalDataProps>({
     },
     fetchColumns(state, data) {
       state.columns = data.data.list
+    },
+    fetchColumn(state, data) {
+      state.columns = [data.data]
+    },
+    fetchPosts(state, data) {
+      state.posts = data.data.list
     }
   },
   actions: {
     fetchColumns({ commit }) {
-      axios.get('/mock/api/columns').then(res => {
-        commit('fetchColumns', res.data)
-      })
+      fetchAndCommit('/mock/api/columns', 'fetchColumns', commit)
+    },
+    fetchColumn({ commit }, cid) {
+      fetchAndCommit(`/mock/api/columns/${cid}`, 'fetchColumn', commit)
+    },
+    fetchPosts({ commit }, cid) {
+      fetchAndCommit(`/mock/api/columns/${cid}/posts`, 'fetchPosts', commit)
     }
   },
   getters: {
     getColumnById: state => (id: string) =>
       state.columns.find(column => column._id === id),
-    getPostsById: state => (cid: number) =>
-      state.posts.filter(post => post.columnId === cid)
+    getPostsById: state => (cid: string) =>
+      state.posts.filter(post => post.column === cid)
   }
 })
 export default store

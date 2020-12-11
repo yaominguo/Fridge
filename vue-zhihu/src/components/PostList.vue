@@ -1,13 +1,17 @@
 <template>
   <div class="post-list">
-    <article class="card mb-3 shadow-sm" v-for="post in list" :key="post.id">
+    <article class="card mb-3 shadow-sm" v-for="post in list" :key="post._id">
       <div class="card-body">
         <h4>{{ post.title }}</h4>
         <div class="row my-3 align-items-center">
           <div class="col-3" v-if="post.image">
-            <img class="rounded-lg w100" :src="post.image" :alt="post.title" />
+            <img
+              class="rounded-lg w-100"
+              :src="post.image.url"
+              :alt="post.title"
+            />
           </div>
-          <p :class="{ 'col-9': post.image }">{{ post.content }}</p>
+          <p :class="{ 'col-9': post.image }">{{ post.excerpt }}</p>
         </div>
         <span class="text-muted">{{ post.createdAt }}</span>
       </div>
@@ -28,5 +32,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped></style>

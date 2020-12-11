@@ -6,7 +6,7 @@
     >
       <div class="col-3 text-center">
         <img
-          :src="column.avatar"
+          :src="avatarUrl"
           :alt="column.title"
           class="rounded-circle border w-100"
         />
@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
@@ -33,11 +33,22 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const route = useRoute()
     const currentId = route.params.id
+    onMounted(() => {
+      store.dispatch('fetchColumn', currentId)
+      store.dispatch('fetchPosts', currentId)
+    })
     const column = computed(() => store.getters.getColumnById(currentId))
     const list = computed(() => store.getters.getPostsById(currentId))
+    const avatarUrl = computed(() => {
+      if (!column.value.avatar) {
+        return require('@/assets/column.jpg')
+      }
+      return column.value.avatar.url
+    })
     return {
       column,
-      list
+      list,
+      avatarUrl
     }
   }
 })
