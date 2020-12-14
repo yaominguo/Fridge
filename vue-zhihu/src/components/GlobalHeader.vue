@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar navbar-dark bg-primary justify-content-between mb-4 px-4">
-    <a href="#" class="navbar-brand">VUE</a>
+    <router-link to="/" class="navbar-brand">
+      VUE
+    </router-link>
     <ul v-if="!user.isLogin" class="list-inline mb-0">
       <li class="list-inline-item">
         <router-link to="/login" class="btn btn-outline-light my2">
@@ -29,9 +31,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
+import { useRouter } from 'vue-router'
 import Dropdown from './Dropdown.vue'
 import DropdownItem from './DropdownItem.vue'
-import { UserProps } from '@/store'
+import store, { UserProps } from '@/store'
 export default defineComponent({
   name: 'GlobalHeader',
   components: { Dropdown, DropdownItem },
@@ -42,7 +45,11 @@ export default defineComponent({
     }
   },
   setup() {
-    const logout = localStorage.removeItem('token')
+    const router = useRouter()
+    const logout = () => {
+      store.commit('logout')
+      router.push('/')
+    }
     return {
       logout
     }

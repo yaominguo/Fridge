@@ -1,5 +1,11 @@
 import { createStore, Commit } from 'vuex'
 import axios from 'axios'
+
+export interface ResponseType<P = {}> {
+  code: number
+  msg: string
+  data: P
+}
 export interface UserProps {
   isLogin: boolean
   nickName?: string
@@ -7,9 +13,10 @@ export interface UserProps {
   column?: string
   email?: string
 }
-interface ImageProps {
+export interface ImageProps {
   _id?: string
   url?: string
+  fitUrl?: string
   createAt?: string
 }
 export interface ColumnProps {
@@ -19,13 +26,14 @@ export interface ColumnProps {
   description: string
 }
 export interface PostProps {
-  _id: string
+  _id?: string
   title: string
   excerpt?: string
   content?: string
-  image?: ImageProps
+  image?: ImageProps | string
   createdAt: string
   column: string
+  author?: string
 }
 export interface GlobalErrorProps {
   status: boolean
@@ -67,7 +75,10 @@ const store = createStore<GlobalDataProps>({
     loading: false,
     columns: [],
     posts: [],
-    user: { isLogin: false },
+    user: {
+      isLogin: false,
+      ...JSON.parse(localStorage.getItem('user') || '{}')
+    },
     error: { status: false }
   },
   mutations: {
@@ -83,8 +94,19 @@ const store = createStore<GlobalDataProps>({
       localStorage.setItem('token', token)
       state.token = token
     },
+    logout(state) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      state.token = ''
+      state.user = { isLogin: false }
+      delete axios.defaults.headers.common.Authorization
+    },
     fetchUser(state, data) {
       state.user = { isLogin: true, ...data.data }
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ isLogin: true, ...data.data })
+      )
     },
     createPost(state, post) {
       state.posts.push(post)
@@ -110,13 +132,20 @@ const store = createStore<GlobalDataProps>({
       return dispatch('login', loginData).then(() => dispatch('fetchUser'))
     },
     fetchColumns({ commit }) {
-      fetchAndCommit('/mock/api/columns', 'fetchColumns', commit)
+      return fetchAndCommit('/mock/api/columns', 'fetchColumns', commit)
     },
     fetchColumn({ commit }, cid) {
-      fetchAndCommit(`/mock/api/columns/${cid}`, 'fetchColumn', commit)
+      return fetchAndCommit(`/mock/api/columns/${cid}`, 'fetchColumn', commit)
     },
     fetchPosts({ commit }, cid) {
-      fetchAndCommit(`/mock/api/columns/${cid}/posts`, 'fetchPosts', commit)
+      return fetchAndCommit(
+        `/mock/api/columns/${cid}/posts`,
+        'fetchPosts',
+        commit
+      )
+    },
+    createPost({ commit }, payload) {
+      return postAndCommit('/mock/api/posts', 'createPost', commit, payload)
     }
   },
   getters: {

@@ -6,7 +6,7 @@
     >
       <div class="col-3 text-center">
         <img
-          :src="avatarUrl"
+          :src="column.avatar && column.avatar.fitUrl"
           :alt="column.title"
           class="rounded-circle border w-100"
         />
@@ -24,8 +24,9 @@
 import { computed, defineComponent, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { ColumnProps, GlobalDataProps } from '@/store'
 import PostList from '../components/PostList.vue'
+import { generateFitUrl } from '@/helper'
 export default defineComponent({
   name: 'ColumnDetail',
   components: { PostList },
@@ -37,18 +38,17 @@ export default defineComponent({
       store.dispatch('fetchColumn', currentId)
       store.dispatch('fetchPosts', currentId)
     })
-    const column = computed(() => store.getters.getColumnById(currentId))
-    const list = computed(() => store.getters.getPostsById(currentId))
-    const avatarUrl = computed(() => {
-      if (!column.value.avatar) {
-        return require('@/assets/column.jpg')
+    const column = computed(() => {
+      const curColumn = store.getters.getColumnById(currentId) as ColumnProps
+      if (curColumn) {
+        generateFitUrl(curColumn, 100, 100)
       }
-      return column.value.avatar.url
+      return curColumn
     })
+    const list = computed(() => store.getters.getPostsById(currentId))
     return {
       column,
-      list,
-      avatarUrl
+      list
     }
   }
 })
