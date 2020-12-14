@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
+import useDOMCreate from '@/hooks/useDOMCreate'
 export default defineComponent({
   name: 'Loader',
   props: {
@@ -27,10 +27,7 @@ export default defineComponent({
     }
   },
   setup() {
-    if (document.querySelector('#loader')) return
-    const node = document.createElement('div')
-    node.id = 'loader'
-    document.body.appendChild(node)
+    useDOMCreate('loader')
   }
 })
 </script>

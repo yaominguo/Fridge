@@ -51,17 +51,17 @@ export default defineComponent({
     const contentVal = ref('')
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        const { columnId } = store.state.user
-        if (!columnId) return
+        const { column } = store.state.user
+        if (!column) return
         const post: PostProps = {
           _id: new Date().getTime() + '',
           title: titleVal.value,
           content: contentVal.value,
-          column: columnId + '',
+          column: column + '',
           createdAt: new Date().toLocaleString()
         }
         store.commit('createPost', post)
-        router.push({ name: 'column', params: { id: columnId } })
+        router.push({ name: 'column', params: { id: column } })
       }
     }
     return {

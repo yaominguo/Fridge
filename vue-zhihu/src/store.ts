@@ -1,10 +1,11 @@
 import { createStore, Commit } from 'vuex'
 import axios from 'axios'
-interface UserProps {
+export interface UserProps {
   isLogin: boolean
-  name?: string
-  id?: number
-  columnId?: number
+  nickName?: string
+  _id?: string
+  column?: string
+  email?: string
 }
 interface ImageProps {
   _id?: string
@@ -26,11 +27,17 @@ export interface PostProps {
   createdAt: string
   column: string
 }
+export interface GlobalErrorProps {
+  status: boolean
+  message?: string
+}
 export interface GlobalDataProps {
   loading: false
+  token: string
   columns: ColumnProps[]
   posts: PostProps[]
   user: UserProps
+  error: GlobalErrorProps
 }
 
 const fetchAndCommit = async (
@@ -40,21 +47,44 @@ const fetchAndCommit = async (
 ) => {
   const { data } = await axios.get(url)
   commit(mutationName, data)
+  return data
+}
+const postAndCommit = async (
+  url: string,
+  mutationName: string,
+  commit: Commit,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any
+) => {
+  const { data } = await axios.post(url, payload)
+  commit(mutationName, data)
+  return data
 }
 
 const store = createStore<GlobalDataProps>({
   state: {
+    token: localStorage.getItem('token') || '',
     loading: false,
     columns: [],
     posts: [],
-    user: { isLogin: true, name: 'Guo', columnId: 1 }
+    user: { isLogin: false },
+    error: { status: false }
   },
   mutations: {
     setLoading(state, val) {
       state.loading = val
     },
-    login(state) {
-      state.user = { ...state.user, isLogin: true, name: 'Guo', columnId: 1 }
+    setError(state, e: GlobalErrorProps) {
+      state.error = e
+    },
+    login(state, data) {
+      const { token } = data.data
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      localStorage.setItem('token', token)
+      state.token = token
+    },
+    fetchUser(state, data) {
+      state.user = { isLogin: true, ...data.data }
     },
     createPost(state, post) {
       state.posts.push(post)
@@ -70,6 +100,15 @@ const store = createStore<GlobalDataProps>({
     }
   },
   actions: {
+    login({ commit }, payload) {
+      return postAndCommit('/mock/api/user/login', 'login', commit, payload)
+    },
+    fetchUser({ commit }) {
+      return fetchAndCommit('/mock/api/user/current', 'fetchUser', commit)
+    },
+    loginAndFetch({ dispatch }, loginData) {
+      return dispatch('login', loginData).then(() => dispatch('fetchUser'))
+    },
     fetchColumns({ commit }) {
       fetchAndCommit('/mock/api/columns', 'fetchColumns', commit)
     },
