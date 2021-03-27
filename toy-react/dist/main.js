@@ -15,7 +15,7 @@
   \*****************/
 /***/ (() => {
 
-eval("for (var _i = 0, _arr = [1, 2, 3]; _i < _arr.length; _i++) {\n  var i = _arr[_i];\n  console.log(i);\n}\n\nvar div = createElement(\"div\", null);\n\n//# sourceURL=webpack://toy-react/./main.js?");
+eval("function createElement(tag, attrs) {\n  var e = document.createElement(tag);\n\n  for (var key in attrs) {\n    e.setAttribute(key, attrs[key]);\n  }\n\n  for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {\n    children[_key - 2] = arguments[_key];\n  }\n\n  for (var _i = 0, _children = children; _i < _children.length; _i++) {\n    var child = _children[_i];\n\n    if (typeof child === 'string') {\n      child = document.createTextNode(child);\n    }\n\n    e.appendChild(child);\n  }\n\n  return e;\n}\n\nvar ele = createElement(\"div\", {\n  \"class\": \"class\",\n  id: \"id\"\n}, createElement(\"h1\", null, \"h1\"), createElement(\"div\", null, \"div\"), createElement(\"p\", null, \"p\"));\ndocument.body.appendChild(ele);\n\n//# sourceURL=webpack://toy-react/./main.js?");
 
 /***/ })
 
