@@ -1,9 +1,17 @@
 import {createElement, render, Component} from './toy-react.js'
 
 class MyComponent extends Component {
+  constructor() {
+    super()
+    this.state = {
+      a: 1,
+      b: 2,
+    }
+  }
   render() {
     return <div>
       <h1>my-component</h1>
+      <p>{this.state.a.toString()}</p>
       {this.children}
     </div>
   }
