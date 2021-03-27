@@ -1,5 +1,4 @@
 const RENDER_TO_DOM = Symbol('renderToDOM')
-const RE_RENDER = Symbol('reRender')
 
 export class Component {
   constructor() {
@@ -16,27 +15,61 @@ export class Component {
   get vdom() {
     return this.render().vdom
   }
-  get vchildren() {
-    return this.children.map(child => child.vdom)
-  }
   [RENDER_TO_DOM](range) {
     this._range = range
-    this.render()[RENDER_TO_DOM](range)
+    this._vdom = this.vdom
+    this._vdom[RENDER_TO_DOM](range)
   }
-  [RE_RENDER]() {
-    let oldRange = this._range
-    const newRange = document.createRange()
-    newRange.setStart(oldRange.startContainer, oldRange.startOffset)
-    newRange.setEnd(oldRange.startContainer, oldRange.startOffset)
-    this[RENDER_TO_DOM](newRange)
+  update() {
+    const isSameNode = (oldNode, newNode) => {
+      if (oldNode.tag !== newNode.tag) return false
+      for (const name in newNode.props) {
+        if (newNode.props[name] !== oldNode.props[name]) return false
+      }
+      if (Object.keys(oldNode.props).length > Object.keys(newNode.props).length) return false
+      if (newNode.tag === '#text') {
+        if (newNode.content !== oldNode.content) return false
+      }
+      return true
+    }
+    const update = (oldNode, newNode) => {
+      if (!isSameNode(oldNode, newNode)) {
+        newNode[RENDER_TO_DOM](oldNode._range)
+        return
+      }
+      newNode._range = oldNode._range
+      const newChildren = newNode.vchildren
+      const oldChildren = oldNode.vchildren
 
-    oldRange.setStart(newRange.endContainer, newRange.endOffset)
-    oldRange.deleteContents()
+      if (!newChildren || !newChildren.length) {
+        return
+      }
+
+      let tailRange = oldChildren[oldChildren.length -1]._range
+
+      for (let i = 0; i < newChildren.length; i++) {
+        const newChild = newChildren[i];
+        const oldChild = oldChildren[i];
+        if (i < oldChildren.length) {
+          update(oldChild, newChild)
+        } else {
+          const range = document.createRange()
+          range.setStart(tailRange.endContainer, tailRange.endOffset)
+          range.setEnd(tailRange.endContainer, tailRange.endOffset)
+          newChild[RENDER_TO_DOM](range)
+          tailRange = range
+        }
+      }
+    }
+    const vdom = this.vdom
+    update(this._vdom, vdom)
+    this._vdom = vdom
   }
+
   setState(newState) {
     if (!this.state || typeof this.state !== 'object') {
       this.state = newState
-      this[RE_RENDER]()
+      this.update()
       return
     }
     const merge = (oldState, newState) => {
@@ -49,45 +82,21 @@ export class Component {
       }
     }
     merge(this.state, newState)
-    this[RE_RENDER]()
+    this.update()
   }
 }
+
 class ElementWrapper extends Component{
   constructor(tag) {
     super(tag)
     this.tag = tag
   }
   get vdom() {
+    this.vchildren = this.children.map(child => child.vdom)
     return this
-    // return {
-    //   tag: this.tag,
-    //   props: this.props,
-    //   children: this.children.map(child => child.vdom),
-    // }
   }
-  // setAttribute(name, value) {
-  //   if (name.match(/^on([\s\S]+)$/)) {
-  //     this.root.addEventListener(
-  //       RegExp.$1.replace(/^[\s\S]/, c => c.toLowerCase()),
-  //       value
-  //     )
-  //     return
-  //   }
-  //   if (name === 'className') {
-  //     this.root.setAttribute('class', value)
-  //     return
-  //   }
-
-  //   this.root.setAttribute(name, value)
-  // }
-  // appendChild(component) {
-  //   const range = document.createRange()
-  //   range.setStart(this.root, this.root.childNodes.length)
-  //   range.setEnd(this.root, this.root.childNodes.length)
-  //   component[RENDER_TO_DOM](range)
-  // }
   [RENDER_TO_DOM](range) {
-    range.deleteContents()
+    this._range = range
     const root = document.createElement(this.tag)
     for (const name in this.props) {
       const value = this.props[name]
@@ -105,13 +114,16 @@ class ElementWrapper extends Component{
       }
     }
 
-    for(const child of this.children) {
+    if (!this.vchildren) {
+      this.vchildren = this.children.map(child => child.vdom)
+    }
+    for(const child of this.vchildren) {
       const childRange = document.createRange()
       childRange.setStart(root, root.childNodes.length)
       childRange.setEnd(root, root.childNodes.length)
       child[RENDER_TO_DOM](childRange)
     }
-    range.insertNode(root)
+    replaceContent(range, root)
   }
 }
 
@@ -120,19 +132,25 @@ class TextWrapper extends Component{
     super(content)
     this.tag = '#text'
     this.content = content
-    this.root = document.createTextNode(content)
   }
   get vdom() {
     return this
-    // return {
-    //   tag: '#text',
-    //   content: this.content,
-    // }
   }
   [RENDER_TO_DOM](range) {
-    range.deleteContents()
-    range.insertNode(this.root)
+    this._range = range
+    const root = document.createTextNode(this.content)
+    replaceContent(range, root)
   }
+}
+
+
+function replaceContent(range, node) {
+  range.insertNode(node)
+  range.setStartAfter(node)
+  range.deleteContents()
+
+  range.setStartBefore(node)
+  range.setEndAfter(node)
 }
 
 export function createElement(tag, attrs, ...children) {
