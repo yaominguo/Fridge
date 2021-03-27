@@ -1,10 +1,23 @@
 const RENDER_TO_DOM = Symbol('renderToDOM')
+const RE_RENDER = Symbol('reRender')
 
 class ElementWrapper {
   constructor(tag) {
     this.root = document.createElement(tag)
   }
   setAttribute(name, value) {
+    if (name.match(/^on([\s\S]+)$/)) {
+      this.root.addEventListener(
+        RegExp.$1.replace(/^[\s\S]/, c => c.toLowerCase()),
+        value
+      )
+      return
+    }
+    if (name === 'className') {
+      this.root.setAttribute('class', value)
+      return
+    }
+
     this.root.setAttribute(name, value)
   }
   appendChild(component) {
@@ -12,7 +25,6 @@ class ElementWrapper {
     range.setStart(this.root, this.root.childNodes.length)
     range.setEnd(this.root, this.root.childNodes.length)
     component[RENDER_TO_DOM](range)
-    // this.root.appendChild(component.root)
   }
   [RENDER_TO_DOM](range) {
     range.deleteContents()
@@ -34,7 +46,7 @@ export class Component {
   constructor() {
     this.props = Object.create(null)
     this.children = []
-    // this._root = null
+    this._range = null
   }
   setAttribute(name, value) {
     this.props[name] = value
@@ -43,14 +55,37 @@ export class Component {
     this.children.push(component)
   }
   [RENDER_TO_DOM](range) {
+    this._range = range
     this.render()[RENDER_TO_DOM](range)
   }
-  // get root () {
-  //   if (!this._root) {
-  //     this._root = this.render().root
-  //   }
-  //   return this._root
-  // }
+  [RE_RENDER]() {
+    let oldRange = this._range
+    const newRange = document.createRange()
+    newRange.setStart(oldRange.startContainer, oldRange.startOffset)
+    newRange.setEnd(oldRange.startContainer, oldRange.startOffset)
+    this[RENDER_TO_DOM](newRange)
+
+    oldRange.setStart(newRange.endContainer, newRange.endOffset)
+    oldRange.deleteContents()
+  }
+  setState(newState) {
+    if (!this.state || typeof this.state !== 'object') {
+      this.state = newState
+      this[RE_RENDER]()
+      return
+    }
+    const merge = (oldState, newState) => {
+      for(const key in newState) {
+        if (!oldState[key] || typeof oldState[key] !== 'object') {
+          oldState[key] = newState[key]
+        } else {
+          merge(oldState[key], newState[key])
+        }
+      }
+    }
+    merge(this.state, newState)
+    this[RE_RENDER]()
+  }
 }
 
 export function createElement(tag, attrs, ...children) {
@@ -70,6 +105,9 @@ export function createElement(tag, attrs, ...children) {
       if (typeof child === 'string') {
         child = new TextWrapper(child)
       }
+      if (!child) {
+        continue
+      }
       if (Array.isArray(child)) {
         insertChildren(child)
       } else {
@@ -82,7 +120,6 @@ export function createElement(tag, attrs, ...children) {
 }
 
 export function render(component, parentNode) {
-  // parentNode.appendChild(component.root)
   const range = document.createRange()
   range.setStart(parentNode, 0)
   range.setEnd(parentNode, parentNode.childNodes.length)
